@@ -94,9 +94,24 @@ html, body {
 .dot.active { background: #000080; }
 
 /* 잠금 관련 레이어 스타일 */
-#full-screen-fechar { display: none; position: absolute; top: 0; left: 0; width: 1080px; height: 2211px; z-index: 9998; }
-#full-screen-fechar img { width: 1080px; height: 2211px; object-fit: fill; }
-#locking-overlay { display: none; position: absolute; top: 0; left: 0; width: 1080px; height: 2211px; z-index: 9999; background: transparent; }
+#full-screen-fechar { 
+    display: none; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 1080px;  /* 컨테이너 너비와 동일하게 */
+    height: 2211px; /* 컨테이너 높이와 동일하게 */
+    z-index: 9998; 
+    background-color: #000; /* 이미지 뒤에 검은 배경을 깔아 여백 방지 */
+}
+
+#full-screen-fechar img { 
+    width: 100%; 
+    height: 100%; 
+    /* fill 대신 cover를 사용하면 비율을 유지하며 화면을 가득 채웁니다 */
+    object-fit: cover; 
+    /* 만약 이미지가 잘리는 게 싫고 무조건 다 보여야 한다면 다시 fill로 두세요 */
+}
 
 /* 잠금 해제 버튼: 상단에서 1830px 위치에 중앙이 오도록 배치 (top: 1745px) */
 /* 잠금 해제 버튼 설정 (외곽선 포함) */
