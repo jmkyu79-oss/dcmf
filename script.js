@@ -1,95 +1,70 @@
-// 1. 화면 크기에 맞춰 1080x2211 컨테이너를 확대/축소 (꽉 차게 만들기)
+// 1. 화면 꽉 채우기 (Scale) 함수
 function resizeApp() {
     const container = document.getElementById('app-container');
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
 
-    // 가로, 세로 비율을 각각 계산해서 화면에 빈틈없이 꽉 채움
+    // 가로/세로 비율을 브라우저 크기에 맞춰서 강제로 확대/축소 (전체화면 효과)
     const scaleX = windowWidth / 1080;
     const scaleY = windowHeight / 2211;
 
     container.style.transform = `scale(${scaleX}, ${scaleY})`;
 }
 
-// 2. 로그인 및 전체화면 모드 실행
+// 2. 로그인 및 주소창 숨기기
 function handleLogin() {
-    // 브라우저 전체화면 요청 (주소창 숨기기 시도)
+    // 사용자의 터치 반응 시 전체화면 요청
     const doc = document.documentElement;
     if (doc.requestFullscreen) doc.requestFullscreen();
     else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
-    else if (doc.msRequestFullscreen) doc.msRequestFullscreen();
 
-    checkPassword();
-}
-
-function checkPassword() {
-    const input = document.getElementById('password-input').value;
-    if (input === "1234abcd") {
+    const pw = document.getElementById('password-input').value;
+    if (pw === "1234abcd") {
         goToPage('page1');
     } else {
         document.getElementById('custom-alert').style.display = 'block';
     }
 }
 
-function goToPage(pageId) {
+function goToPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    const target = document.getElementById(pageId);
-    if (target) {
-        target.classList.add('active');
-        // 스크롤 초기화
-        const scrollArea = target.querySelector('.scroll-container');
-        if (scrollArea) scrollArea.scrollTop = 0;
-    }
+    document.getElementById(id).classList.add('active');
+    resizeApp(); // 페이지 전환 시 스케일 재확인
 }
 
 function closeAlert() {
     document.getElementById('custom-alert').style.display = 'none';
-    document.getElementById('password-input').value = "";
 }
 
-// 3. 이미지 변경 및 화면 잠금 (3페이지 전용)
-function handleImageLock() {
-    const targetImg = document.getElementById('target-img');
+// 3. [핵심] 이미지 잠금 및 전체화면 fechar 노출
+function handleLock() {
+    const fecharLayer = document.getElementById('full-screen-fechar');
     const overlay = document.getElementById('locking-overlay');
-    const page3 = document.getElementById('page3');
-
-    // fechar.gif로 이미지 변경
-    if (targetImg) targetImg.src = 'potos/images/fechar.gif';
     
-    // 터치 방지 레이어 활성화
+    // 슬라이더 내부 이미지가 아니라, 전체를 덮는 레이어를 보여줌 (찌그러짐 방지)
+    if (fecharLayer) fecharLayer.style.display = 'block';
     if (overlay) overlay.style.display = 'block';
     
-    // 스크롤도 완전히 막음
-    const scrollContainer = page3.querySelector('.scroll-container');
-    const sliderContainer = page3.querySelector('.middle-frame-wrapper');
-    if (scrollContainer) scrollContainer.style.overflowY = 'hidden';
-    if (sliderContainer) sliderContainer.style.overflowX = 'hidden';
-
-    console.log("잠금 활성화: fechar.gif 표시됨");
+    console.log("잠금 완료: fechar.gif 전체화면 노출");
 }
 
-// 이벤트 초기화
 window.addEventListener('resize', resizeApp);
 window.addEventListener('load', resizeApp);
 
 document.addEventListener('DOMContentLoaded', () => {
     resizeApp();
 
-    // 3페이지 첫번째 이미지 클릭 시 잠금 이벤트 연결
     const targetImg = document.getElementById('target-img');
     if (targetImg) {
-        targetImg.addEventListener('click', handleImageLock, { once: true });
+        targetImg.addEventListener('click', handleLock, { once: true });
     }
 
-    // 슬라이더 도트 연동
     const slider = document.getElementById('slider');
     const dots = document.querySelectorAll('.dot');
     if (slider) {
         slider.addEventListener('scroll', () => {
             const index = Math.round(slider.scrollLeft / 1080);
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
-            });
+            dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
         });
     }
 

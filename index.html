@@ -8,11 +8,13 @@
 </head>
 <body oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
 
+    <!-- 이 컨테이너가 1080x2211 규격을 유지하며 화면에 꽉 차게 확대됩니다 -->
     <div id="app-container">
+        
         <!-- 로그인 페이지 -->
         <section id="login-page" class="page active">
             <div class="content-bg">
-                <img src="potos/images/enter.gif" alt="Enter">
+                <img src="potos/images/enter.gif">
                 <div class="login-container">
                     <input type="password" id="password-input" maxlength="15">
                     <button id="login-btn" onclick="handleLogin()"></button>
@@ -21,7 +23,7 @@
             <div id="custom-alert" class="alert-overlay">
                 <div class="alert-box">
                     <div class="error-circle"><span class="x-mark">✕</span></div>
-                    <p id="alert-message">Chave de acesso incorreta.</p>
+                    <p>Chave de acesso incorreta.</p>
                     <button id="ok-btn" onclick="closeAlert()">OK</button>
                 </div>
             </div>
@@ -30,7 +32,7 @@
         <!-- 페이지 1 -->
         <section id="page1" class="page">
             <div class="content-bg">
-                <img src="potos/images/im1.gif" alt="Page 1">
+                <img src="potos/images/im1.gif">
                 <div class="button-column">
                     <button onclick="goToPage('page2')"></button>
                     <button></button><button></button><button></button>
@@ -42,7 +44,7 @@
         <section id="page2" class="page">
             <button class="back-button" onclick="goToPage('page1')"></button>
             <div class="content-bg">
-                <img src="potos/images/im2.gif" alt="Page 2">
+                <img src="potos/images/im2.gif">
                 <div class="button-grid">
                     <div class="col">
                         <button onclick="goToPage('page3')"></button>
@@ -59,28 +61,36 @@
         <section id="page3" class="page">
             <button class="back-button" onclick="goToPage('page2')" style="z-index: 1000;"></button>
             <header class="top-frame">
-                <img src="potos/images/im3-top.gif" alt="Top">
+                <img src="potos/images/im3-top.gif">
             </header>
             
             <main class="scroll-container">
                 <div class="middle-frame-wrapper" id="slider">
                     <div class="middle-slider">
-                        <div class="slide"><img id="target-img" src="potos/images/im3-cent/im3-1.gif" alt="Slide 1"></div>
-                        <div class="slide"><img src="potos/images/im3-cent/im3-2.gif" alt="Slide 2"></div>
-                        <div class="slide"><img src="potos/images/im3-cent/im3-3.gif" alt="Slide 3"></div>
-                        <div class="slide"><img src="potos/images/im3-cent/im3-4.gif" alt="Slide 4"></div>
+                        <!-- im3-1.gif 클릭 시 잠금 실행 -->
+                        <div class="slide"><img id="target-img" src="potos/images/im3-cent/im3-1.gif"></div>
+                        <div class="slide"><img src="potos/images/im3-cent/im3-2.gif"></div>
+                        <div class="slide"><img src="potos/images/im3-cent/im3-3.gif"></div>
+                        <div class="slide"><img src="potos/images/im3-cent/im3-4.gif"></div>
                     </div>
                 </div>
                 <div class="dots-container">
                     <span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
                 </div>
                 <footer class="bottom-frame">
-                    <img src="potos/images/im3-batt.gif" alt="Bottom">
+                    <img src="potos/images/im3-batt.gif">
                 </footer>
             </main>
-            <!-- 화면 잠금 레이어 -->
+
+            <!-- fechar.gif 전용 레이어 (찌그러짐 방지용 전체 화면) -->
+            <div id="full-screen-fechar">
+                <img src="potos/images/fechar.gif">
+            </div>
+
+            <!-- 터치 차단용 레이어 -->
             <div id="locking-overlay"></div>
         </section>
+
     </div>
 
     <script src="script.js"></script>

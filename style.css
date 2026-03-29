@@ -1,81 +1,57 @@
-/* 기본 설정 */
+/* 기본 초기화 */
 * { margin: 0; padding: 0; box-sizing: border-box; touch-action: none; }
 html, body { 
     width: 100%; height: 100%; overflow: hidden; background: #000; 
     display: flex; justify-content: center; align-items: center;
 }
 
-/* 1080x2211 원본 크기 유지 및 중앙 정렬 */
+/* 1080x2211 원본 규격 컨테이너 */
 #app-container {
     width: 1080px; height: 2211px;
     position: relative;
-    transform-origin: center center;
+    transform-origin: center center; /* 중앙 기준 스케일링 */
     flex-shrink: 0;
 }
 
 .page { display: none; width: 1080px; height: 2211px; position: absolute; top: 0; left: 0; overflow: hidden; background: #fff; }
 .page.active { display: block; }
 
-/* 배경 이미지들 */
-.content-bg img { width: 1080px; height: 2211px; object-fit: cover; position: absolute; top: 0; left: 0; }
+/* 배경 이미지 */
+.content-bg img { width: 1080px; height: 2211px; object-fit: cover; position: absolute; }
 
 /* 로그인 UI */
-.login-container {
-    position: absolute; top: 44.5%; left: 50%; transform: translate(-50%, -50%);
-    display: flex; flex-direction: column; align-items: center; gap: 40px; z-index: 1000;
-}
-#password-input {
-    width: 600px; height: 120px; font-size: 60px; text-align: center;
-    border: none; background: transparent; color: #000; outline: none;
-}
+.login-container { position: absolute; top: 44.5%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 40px; z-index: 1000; }
+#password-input { width: 600px; height: 120px; font-size: 60px; text-align: center; border: none; background: transparent; outline: none; }
 #login-btn { width: 300px; height: 110px; border: none; background: transparent; cursor: pointer; }
 
-/* 버튼 레이아웃 */
-.back-button { position: absolute; width: 120px; height: 120px; top: 155px; left: 110px; transform: translate(-50%, -50%); border: none; background: transparent; z-index: 1000; }
+/* 버튼 위치 (원본 수치 유지) */
+.back-button { position: absolute; width: 120px; height: 120px; top: 155px; left: 110px; transform: translate(-50%, -50%); border: none; background: transparent; z-index: 500; }
 .button-column { position: absolute; top: 42.5%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; gap: 50px; }
 .button-column button { width: 995px; height: 277px; background: transparent; border: none; }
-
 .button-grid { position: absolute; top: 71%; left: 50%; transform: translate(-50%, -50%); display: flex; gap: 40px; }
-.button-grid .col { display: flex; flex-direction: column; gap: 20px; }
 .button-grid button { width: 478px; height: 321px; background: transparent; border: none; }
 
-/* 3페이지 슬라이더 구조 */
-.top-frame { width: 1080px; height: 252px; position: absolute; top: 0; left: 0; z-index: 100; }
-.scroll-container { width: 1080px; height: 2211px; overflow-y: auto; position: relative; scrollbar-width: none; }
-.scroll-container::-webkit-scrollbar { display: none; }
-
-.middle-frame-wrapper { 
-    width: 1080px; height: 1646px; margin-top: 252px; 
-    overflow-x: scroll; display: flex; scroll-snap-type: x mandatory; 
-    scrollbar-width: none;
-}
-.middle-frame-wrapper::-webkit-scrollbar { display: none; }
+/* 3페이지 슬라이더 로직 */
+.top-frame { width: 1080px; height: 252px; position: absolute; top: 0; z-index: 100; }
+.scroll-container { width: 1080px; height: 2211px; overflow-y: auto; background: #fff; }
+.middle-frame-wrapper { width: 1080px; height: 1646px; margin-top: 252px; overflow-x: scroll; display: flex; scroll-snap-type: x mandatory; }
 .middle-slider { display: flex; width: 4320px; }
-.slide { width: 1080px; height: 1646px; scroll-snap-align: start; }
-.slide img { width: 1080px; height: 1646px; display: block; }
-
+.slide, .slide img { width: 1080px; height: 1646px; object-fit: cover; }
 .dots-container { width: 1080px; height: 100px; display: flex; justify-content: center; align-items: center; gap: 15px; background: #fff; }
 .dot { width: 15px; height: 15px; background: rgba(0,0,0,0.15); border-radius: 50%; }
 .dot.active { background: #000080; }
 .bottom-frame img { width: 1080px; height: 789px; display: block; }
 
-/* 잠금 레이어 (화면 터치 방지) */
-#locking-overlay { 
-    display: none; position: absolute; top: 0; left: 0; 
-    width: 1080px; height: 2211px; z-index: 9999; background: transparent; 
+/* [수정] fechar 레이어: 찌그러지지 않게 전체화면 1080x2211로 고정 */
+#full-screen-fechar {
+    display: none; position: absolute; top: 0; left: 0;
+    width: 1080px; height: 2211px; z-index: 9998;
 }
+#full-screen-fechar img { width: 1080px; height: 2211px; object-fit: fill; }
 
-/* 알림창 스타일 */
-.alert-overlay {
-    display: none; position: absolute; top: 0; left: 0; width: 1080px; height: 2211px;
-    background: rgba(0, 0, 0, 0.4); z-index: 3000;
-}
-.alert-box {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 900px; background: #F8F9FA; border-radius: 80px; padding: 100px 40px;
-    display: flex; flex-direction: column; align-items: center; border: 2px solid #D1D1D1;
-}
-.error-circle { width: 200px; height: 200px; background: #D93025; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 50px; }
-.x-mark { color: #fff; font-size: 100px; }
-.alert-box p { font-size: 40px; color: #0D3B7A; font-weight: bold; margin-bottom: 60px; }
-#ok-btn { width: 700px; height: 120px; background: #1557C0; color: #fff; border: none; border-radius: 60px; font-size: 40px; font-weight: bold; }
+/* 잠금 오버레이 */
+#locking-overlay { display: none; position: absolute; top: 0; left: 0; width: 1080px; height: 2211px; z-index: 9999; background: transparent; }
+
+/* 알림창 */
+.alert-overlay { display: none; position: absolute; top: 0; left: 0; width: 1080px; height: 2211px; background: rgba(0,0,0,0.4); z-index: 3000; }
+.alert-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 900px; background: #fff; border-radius: 80px; padding: 100px; text-align: center; }
