@@ -3,31 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <!-- 모바일 상태바 글자색 및 네비게이션바 배경색 설정 -->
+    <meta name="theme-color" content="#2b2b2b">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Full Screen App</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
 
     <div id="app-container">
-        <!-- 로그인 페이지 -->
+        <!-- 로그인 페이지 섹션 -->
         <section id="login-page" class="page active">
             <div class="content-bg">
                 <img src="potos/images/enter.gif">
                 <div class="login-container">
+                    <!-- 비밀번호 입력란 (위치 고정) -->
                     <input type="password" id="password-input" maxlength="15">
+                    <!-- 로그인 버튼 (위치 고정) -->
                     <button id="login-btn" onclick="handleLogin()"></button>
                 </div>
             </div>
+            <!-- 에러 메시지 알림창 (errer.gif와 동일한 문구 및 줄바꿈) -->
             <div id="custom-alert" class="alert-overlay">
                 <div class="alert-box">
                     <div class="error-circle"><span class="x-mark">✕</span></div>
-                    <p>Chave de acesso incorreta.</p>
+                    <p class="error-text">Chave de acesso incorreta. Verifique a<br>chave digitada.</p>
                     <button id="ok-btn" onclick="closeAlert()">OK</button>
                 </div>
             </div>
         </section>
 
-        <!-- 페이지 1 -->
+        <!-- 페이지 1: 메뉴 페이지 -->
         <section id="page1" class="page">
             <div class="content-bg">
                 <img src="potos/images/im1.gif">
@@ -38,7 +44,7 @@
             </div>
         </section>
 
-        <!-- 페이지 2 -->
+        <!-- 페이지 2: 상세 메뉴 페이지 -->
         <section id="page2" class="page">
             <button class="back-button" onclick="goToPage('page1')"></button>
             <div class="content-bg">
@@ -55,43 +61,50 @@
             </div>
         </section>
 
-        <!-- 페이지 3 -->
+        <!-- 페이지 3: 메인 스크롤 및 슬라이더 페이지 -->
         <section id="page3" class="page">
             <button class="back-button" onclick="goToPage('page2')" style="z-index: 1001;"></button>
             
-            <!-- [시간표시 1] 3페이지 기본용 -->
+            <!-- 시간 표시 (일반용 및 잠금용) -->
             <div id="datetime-display"></div>
-            
-            <!-- [시간표시 2] fechar 잠금화면 전용 (글자색 f4f4f4) -->
             <div id="datetime-display-lock"></div>
 
+            <!-- 상단 프레임 -->
             <header class="top-frame">
                 <img src="potos/images/im3-top.gif">
             </header>
             
+            <!-- 메인 콘텐츠 (중간 슬라이더 + 하단 프레임) -->
             <main class="scroll-container">
                 <div class="middle-frame-wrapper" id="slider">
                     <div class="middle-slider">
+                        <!-- 첫 번째 이미지 클릭 시 잠금 모드 진입 -->
                         <div class="slide"><img id="target-img" src="potos/images/im3-cent/im3-1.gif"></div>
                         <div class="slide"><img src="potos/images/im3-cent/im3-2.gif"></div>
                         <div class="slide"><img src="potos/images/im3-cent/im3-3.gif"></div>
                         <div class="slide"><img src="potos/images/im3-cent/im3-4.gif"></div>
                     </div>
                 </div>
+                <!-- 인디케이터 점 -->
                 <div class="dots-container">
                     <span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
                 </div>
+                <!-- 하단 프레임 -->
                 <footer class="bottom-frame">
                     <img src="potos/images/im3-batt.gif">
                 </footer>
             </main>
 
-            <!-- 잠금 이미지 레이어 -->
+            <!-- 잠금 화면 레이어 (fechar.gif) -->
             <div id="full-screen-fechar">
                 <img src="potos/images/fechar.gif">
             </div>
-            <!-- 터치 차단 레이어 -->
+            
+            <!-- 터치 이벤트 차단용 투명 레이어 -->
             <div id="locking-overlay"></div>
+            
+            <!-- 잠금 해제 버튼 (화면 최상단 레이어, 위치: 1830px 중앙) -->
+            <button id="unlock-btn" onclick="unlockApp()"></button>
         </section>
     </div>
 

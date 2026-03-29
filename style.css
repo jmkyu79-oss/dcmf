@@ -1,6 +1,11 @@
+/* 기본 초기화 */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { width: 100%; height: 100%; overflow: hidden; background: #000; display: flex; justify-content: center; align-items: center; }
+html, body { 
+    width: 100%; height: 100%; overflow: hidden; 
+    background: #000; display: flex; justify-content: center; align-items: center; 
+}
 
+/* 메인 앱 컨테이너 (고정 해상도 1080x2211) */
 #app-container {
     width: 1080px; height: 2211px;
     position: relative;
@@ -8,77 +13,129 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; disp
     flex-shrink: 0;
 }
 
+/* 각 페이지 공통 스타일 */
 .page { display: none; width: 1080px; height: 2211px; position: absolute; top: 0; left: 0; overflow: hidden; background: #fff; }
 .page.active { display: block; }
 
-/* 3페이지 기본 시간 스타일 */
+/* 3페이지 기본 시간 표시 위치 및 스타일 */
 #datetime-display {
-    position: absolute; 
-    top: 170px;      /* 3페이지에서의 세로 위치 */
-    right: 310px;    /* 3페이지에서의 가로 위치 */
-    font-size: 33px; 
-    font-weight: 200; 
-    color: #b3bcd1; 
-    z-index: 10000; 
-    font-family: 'Arial', sans-serif;
+    position: absolute; top: 170px; right: 310px;
+    font-size: 33px; font-weight: 200; color: #b3bcd1;
+    z-index: 1000; font-family: 'Arial', sans-serif;
 }
 
-/* fechar 잠금화면 전용 시간 스타일 */
+/* 잠금 화면 전용 시간 표시 (색상: f4f4f4) */
 #datetime-display-lock {
-    display: none;   /* 처음에는 숨김 */
-    position: absolute; 
-    top: 183px;      /* 잠금화면에서의 세로 위치 (조절 가능) */
-    right: 310px;    /* 잠금화면에서의 가로 위치 (조절 가능) */
-    font-size: 33px; 
-    font-weight: 200; 
-    color: #f4f4f4;  /* 요청하신 색상 */
-    z-index: 10001;  /* fechar.gif(9998) 보다 높은 위치 */
-    font-family: 'Arial', sans-serif;
+    display: none; position: absolute; top: 183px; right: 310px;
+    font-size: 33px; font-weight: 200; color: #f4f4f4;
+    z-index: 10001; font-family: 'Arial', sans-serif;
 }
 
-.content-bg img { width: 1080px; height: 2211px; object-fit: cover; position: absolute; }
+/* 배경 이미지 설정 */
+.content-bg img { width: 1080px; height: 2211px; object-fit: cover; position: absolute; z-index: 1; }
 
-/* 3페이지 전용 스크롤 및 슬라이더 설정 */
+/* 3페이지 상단 프레임 및 메인 스크롤 설정 (간격 제거됨) */
+.top-frame { width: 1080px; height: auto; line-height: 0; position: relative; z-index: 2; }
+.top-frame img { width: 1080px; height: auto; display: block; }
+
 .scroll-container { 
-    width: 1080px; height: 2211px; 
-    overflow-y: scroll; 
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    width: 1080px; height: 1959px; 
+    overflow-y: scroll; scrollbar-width: none;
+    position: relative; z-index: 2;
 }
 .scroll-container::-webkit-scrollbar { display: none; }
 
+/* 중간 슬라이더 영역: 상단 프레임과 밀착(margin 0) */
 .middle-frame-wrapper { 
-    width: 1080px; height: 1646px; margin-top: 252px; 
-    overflow-x: scroll; 
-    display: flex; 
-    scroll-snap-type: x mandatory; 
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    width: 1080px; height: 1646px; 
+    margin-top: 0; 
+    overflow-x: scroll; display: flex; 
+    scroll-snap-type: x mandatory; scrollbar-width: none;
 }
 .middle-frame-wrapper::-webkit-scrollbar { display: none; }
 
 .middle-slider { display: flex; width: 4320px; }
-.slide { width: 1080px; height: 1646px; scroll-snap-align: start; flex-shrink: 0; }
+.slide { 
+    width: 1080px; height: 1646px; 
+    scroll-snap-align: start;   /* 스냅 지점을 이미지 시작점으로 설정 */
+    scroll-snap-stop: always;  /* 드래그 한 번에 한 장씩만 멈추도록 설정 (핵심 수정) */
+    flex-shrink: 0; 
+} 
 .slide img { width: 1080px; height: 1646px; object-fit: cover; }
 
-/* 공통 UI 요소 */
-.login-container { position: absolute; top: 43.5%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; z-index: 1000; }
+/* 로그인 입력창 및 버튼 레이아웃 */
+.login-container { 
+    position: absolute; top: 43.5%; left: 50%; transform: translate(-50%, -50%); 
+    z-index: 100; display: flex; flex-direction: column; align-items: center; 
+}
 #password-input { width: 600px; height: 120px; font-size: 60px; text-align: center; border: none; background: transparent; outline: none; }
 #login-btn { width: 300px; height: 110px; border: none; background: transparent; cursor: pointer; }
+
+/* 뒤로가기 버튼 스타일 */
 .back-button { position: absolute; width: 120px; height: 120px; top: 155px; left: 110px; transform: translate(-50%, -50%); border: none; background: transparent; z-index: 500; }
-.button-column { position: absolute; top: 42.5%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; gap: 50px; }
-.button-column button { width: 995px; height: 277px; background: transparent; border: none; }
-.button-grid { position: absolute; top: 71%; left: 50%; transform: translate(-50%, -50%); display: flex; gap: 40px; }
-.button-grid button { width: 478px; height: 321px; background: transparent; border: none; }
+
+/* 1페이지 버튼 리스트 */
+.button-column { 
+    position: absolute; top: 42.5%; left: 50%; transform: translate(-50%, -50%); 
+    display: flex; flex-direction: column; gap: 50px; z-index: 100; 
+}
+.button-column button { width: 995px; height: 277px; background: transparent; border: none; cursor: pointer; }
+
+/* 2페이지 버튼 그리드 */
+.button-grid { 
+    position: absolute; top: 71%; left: 50%; transform: translate(-50%, -50%); 
+    display: flex; gap: 40px; z-index: 100; 
+}
+.button-grid button { width: 478px; height: 321px; background: transparent; border: none; cursor: pointer; }
+
+/* 슬라이더 인디케이터 스타일 */
 .dots-container { width: 1080px; height: 100px; display: flex; justify-content: center; align-items: center; gap: 15px; background: #fff; }
 .dot { width: 15px; height: 15px; background: rgba(0,0,0,0.15); border-radius: 50%; }
 .dot.active { background: #000080; }
 
-/* 잠금 관련 레이어 */
+/* 잠금 관련 레이어 스타일 */
 #full-screen-fechar { display: none; position: absolute; top: 0; left: 0; width: 1080px; height: 2211px; z-index: 9998; }
 #full-screen-fechar img { width: 1080px; height: 2211px; object-fit: fill; }
 #locking-overlay { display: none; position: absolute; top: 0; left: 0; width: 1080px; height: 2211px; z-index: 9999; background: transparent; }
 
-/* 경고창 */
+/* 잠금 해제 버튼: 상단에서 1830px 위치에 중앙이 오도록 배치 (top: 1745px) */
+/* 잠금 해제 버튼 설정 (외곽선 포함) */
+#unlock-btn {
+    display: none;
+    position: absolute;
+    /* --- 위치 조절 구간 --- */
+    top: 2060px; /* 위아래 위치가 안 맞으면 이 값을 수정하세요 */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 210px;
+    height: 110px;
+    /* -------------------- */
+    
+    /* 외곽선 표시 (위치 잡기용) */
+    /* 위치를 다 잡으신 후에는 아래 line을 border: none; 으로 바꾸거나 삭제하세요 */
+    border: none; 
+    
+    background: none; /* 영역 확인을 위해 살짝 붉은색 투명 배경 추가 - rgba(255, 0, 0, 0.2); */
+    cursor: pointer;
+    z-index: 99999;
+}
+
+/* 에러 알림창 스타일 */
 .alert-overlay { display: none; position: absolute; top: 0; left: 0; width: 1080px; height: 2211px; background: rgba(0,0,0,0.4); z-index: 3000; }
-.alert-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 900px; background: #fff; border-radius: 80px; padding: 100px; text-align: center; }
+.alert-box { 
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+    width: 850px; background: #fff; border-radius: 60px; padding: 80px 40px; text-align: center; 
+}
+.error-circle { 
+    width: 140px; height: 140px; background: #e53935; border-radius: 50%; 
+    display: flex; justify-content: center; align-items: center; margin: 0 auto 50px; 
+}
+.x-mark { color: white; font-size: 80px; font-weight: bold; }
+.error-text { 
+    font-size: 42px; color: #004098; line-height: 1.4; font-weight: 600; margin-bottom: 60px; 
+    font-family: 'Arial', sans-serif;
+}
+#ok-btn { 
+    width: 650px; height: 110px; background: #1557c0; color: white; 
+    border-radius: 55px; border: none; font-size: 38px; font-weight: bold; cursor: pointer;
+}
