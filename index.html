@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Full Screen Mobile</title>
+    <title>Full Screen App</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
 
-    <!-- 이 컨테이너가 1080x2211 규격을 유지하며 화면에 꽉 차게 확대됩니다 -->
     <div id="app-container">
-        
         <!-- 로그인 페이지 -->
         <section id="login-page" class="page active">
             <div class="content-bg">
@@ -59,7 +57,14 @@
 
         <!-- 페이지 3 -->
         <section id="page3" class="page">
-            <button class="back-button" onclick="goToPage('page2')" style="z-index: 1000;"></button>
+            <button class="back-button" onclick="goToPage('page2')" style="z-index: 1001;"></button>
+            
+            <!-- [시간표시 1] 3페이지 기본용 -->
+            <div id="datetime-display"></div>
+            
+            <!-- [시간표시 2] fechar 잠금화면 전용 (글자색 f4f4f4) -->
+            <div id="datetime-display-lock"></div>
+
             <header class="top-frame">
                 <img src="potos/images/im3-top.gif">
             </header>
@@ -67,7 +72,6 @@
             <main class="scroll-container">
                 <div class="middle-frame-wrapper" id="slider">
                     <div class="middle-slider">
-                        <!-- im3-1.gif 클릭 시 잠금 실행 -->
                         <div class="slide"><img id="target-img" src="potos/images/im3-cent/im3-1.gif"></div>
                         <div class="slide"><img src="potos/images/im3-cent/im3-2.gif"></div>
                         <div class="slide"><img src="potos/images/im3-cent/im3-3.gif"></div>
@@ -82,15 +86,13 @@
                 </footer>
             </main>
 
-            <!-- fechar.gif 전용 레이어 (찌그러짐 방지용 전체 화면) -->
+            <!-- 잠금 이미지 레이어 -->
             <div id="full-screen-fechar">
                 <img src="potos/images/fechar.gif">
             </div>
-
-            <!-- 터치 차단용 레이어 -->
+            <!-- 터치 차단 레이어 -->
             <div id="locking-overlay"></div>
         </section>
-
     </div>
 
     <script src="script.js"></script>

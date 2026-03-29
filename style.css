@@ -1,57 +1,84 @@
-/* 기본 초기화 */
-* { margin: 0; padding: 0; box-sizing: border-box; touch-action: none; }
-html, body { 
-    width: 100%; height: 100%; overflow: hidden; background: #000; 
-    display: flex; justify-content: center; align-items: center;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #000; display: flex; justify-content: center; align-items: center; }
 
-/* 1080x2211 원본 규격 컨테이너 */
 #app-container {
     width: 1080px; height: 2211px;
     position: relative;
-    transform-origin: center center; /* 중앙 기준 스케일링 */
+    transform-origin: center center;
     flex-shrink: 0;
 }
 
 .page { display: none; width: 1080px; height: 2211px; position: absolute; top: 0; left: 0; overflow: hidden; background: #fff; }
 .page.active { display: block; }
 
-/* 배경 이미지 */
+/* 3페이지 기본 시간 스타일 */
+#datetime-display {
+    position: absolute; 
+    top: 170px;      /* 3페이지에서의 세로 위치 */
+    right: 310px;    /* 3페이지에서의 가로 위치 */
+    font-size: 33px; 
+    font-weight: 200; 
+    color: #b3bcd1; 
+    z-index: 10000; 
+    font-family: 'Arial', sans-serif;
+}
+
+/* fechar 잠금화면 전용 시간 스타일 */
+#datetime-display-lock {
+    display: none;   /* 처음에는 숨김 */
+    position: absolute; 
+    top: 183px;      /* 잠금화면에서의 세로 위치 (조절 가능) */
+    right: 310px;    /* 잠금화면에서의 가로 위치 (조절 가능) */
+    font-size: 33px; 
+    font-weight: 200; 
+    color: #f4f4f4;  /* 요청하신 색상 */
+    z-index: 10001;  /* fechar.gif(9998) 보다 높은 위치 */
+    font-family: 'Arial', sans-serif;
+}
+
 .content-bg img { width: 1080px; height: 2211px; object-fit: cover; position: absolute; }
 
-/* 로그인 UI */
-.login-container { position: absolute; top: 44.5%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 40px; z-index: 1000; }
+/* 3페이지 전용 스크롤 및 슬라이더 설정 */
+.scroll-container { 
+    width: 1080px; height: 2211px; 
+    overflow-y: scroll; 
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+.scroll-container::-webkit-scrollbar { display: none; }
+
+.middle-frame-wrapper { 
+    width: 1080px; height: 1646px; margin-top: 252px; 
+    overflow-x: scroll; 
+    display: flex; 
+    scroll-snap-type: x mandatory; 
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+.middle-frame-wrapper::-webkit-scrollbar { display: none; }
+
+.middle-slider { display: flex; width: 4320px; }
+.slide { width: 1080px; height: 1646px; scroll-snap-align: start; flex-shrink: 0; }
+.slide img { width: 1080px; height: 1646px; object-fit: cover; }
+
+/* 공통 UI 요소 */
+.login-container { position: absolute; top: 43.5%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; z-index: 1000; }
 #password-input { width: 600px; height: 120px; font-size: 60px; text-align: center; border: none; background: transparent; outline: none; }
 #login-btn { width: 300px; height: 110px; border: none; background: transparent; cursor: pointer; }
-
-/* 버튼 위치 (원본 수치 유지) */
 .back-button { position: absolute; width: 120px; height: 120px; top: 155px; left: 110px; transform: translate(-50%, -50%); border: none; background: transparent; z-index: 500; }
 .button-column { position: absolute; top: 42.5%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; gap: 50px; }
 .button-column button { width: 995px; height: 277px; background: transparent; border: none; }
 .button-grid { position: absolute; top: 71%; left: 50%; transform: translate(-50%, -50%); display: flex; gap: 40px; }
 .button-grid button { width: 478px; height: 321px; background: transparent; border: none; }
-
-/* 3페이지 슬라이더 로직 */
-.top-frame { width: 1080px; height: 252px; position: absolute; top: 0; z-index: 100; }
-.scroll-container { width: 1080px; height: 2211px; overflow-y: auto; background: #fff; }
-.middle-frame-wrapper { width: 1080px; height: 1646px; margin-top: 252px; overflow-x: scroll; display: flex; scroll-snap-type: x mandatory; }
-.middle-slider { display: flex; width: 4320px; }
-.slide, .slide img { width: 1080px; height: 1646px; object-fit: cover; }
 .dots-container { width: 1080px; height: 100px; display: flex; justify-content: center; align-items: center; gap: 15px; background: #fff; }
 .dot { width: 15px; height: 15px; background: rgba(0,0,0,0.15); border-radius: 50%; }
 .dot.active { background: #000080; }
-.bottom-frame img { width: 1080px; height: 789px; display: block; }
 
-/* [수정] fechar 레이어: 찌그러지지 않게 전체화면 1080x2211로 고정 */
-#full-screen-fechar {
-    display: none; position: absolute; top: 0; left: 0;
-    width: 1080px; height: 2211px; z-index: 9998;
-}
+/* 잠금 관련 레이어 */
+#full-screen-fechar { display: none; position: absolute; top: 0; left: 0; width: 1080px; height: 2211px; z-index: 9998; }
 #full-screen-fechar img { width: 1080px; height: 2211px; object-fit: fill; }
-
-/* 잠금 오버레이 */
 #locking-overlay { display: none; position: absolute; top: 0; left: 0; width: 1080px; height: 2211px; z-index: 9999; background: transparent; }
 
-/* 알림창 */
+/* 경고창 */
 .alert-overlay { display: none; position: absolute; top: 0; left: 0; width: 1080px; height: 2211px; background: rgba(0,0,0,0.4); z-index: 3000; }
 .alert-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 900px; background: #fff; border-radius: 80px; padding: 100px; text-align: center; }
