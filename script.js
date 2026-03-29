@@ -1,129 +1,100 @@
-// 페이지 전환 함수
+// 1. 화면 크기에 맞춰 1080x2211 컨테이너를 확대/축소 (꽉 차게 만들기)
+function resizeApp() {
+    const container = document.getElementById('app-container');
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+
+    // 가로, 세로 비율을 각각 계산해서 화면에 빈틈없이 꽉 채움
+    const scaleX = windowWidth / 1080;
+    const scaleY = windowHeight / 2211;
+
+    container.style.transform = `scale(${scaleX}, ${scaleY})`;
+}
+
+// 2. 로그인 및 전체화면 모드 실행
+function handleLogin() {
+    // 브라우저 전체화면 요청 (주소창 숨기기 시도)
+    const doc = document.documentElement;
+    if (doc.requestFullscreen) doc.requestFullscreen();
+    else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
+    else if (doc.msRequestFullscreen) doc.msRequestFullscreen();
+
+    checkPassword();
+}
+
+function checkPassword() {
+    const input = document.getElementById('password-input').value;
+    if (input === "1234abcd") {
+        goToPage('page1');
+    } else {
+        document.getElementById('custom-alert').style.display = 'block';
+    }
+}
+
 function goToPage(pageId) {
-    const pages = document.querySelectorAll('.page');
-    pages.forEach(page => page.classList.remove('active'));
-
-    const targetPage = document.getElementById(pageId);
-    if (targetPage) {
-        targetPage.classList.add('active');
-        window.scrollTo(0, 0);
-        
-        // 페이지 이동 시 이전 페이지의 잠금 상태 초기화
-        const oldLockedPage = document.querySelector('.page.locked');
-        if (oldLockedPage) {
-            oldLockedPage.classList.remove('locked');
-            const overlay = oldLockedPage.querySelector('.locking-overlay');
-            if (overlay) overlay.style.display = 'none';
-        }
-
-        const scrollArea = targetPage.querySelector('.scroll-container');
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById(pageId);
+    if (target) {
+        target.classList.add('active');
+        // 스크롤 초기화
+        const scrollArea = target.querySelector('.scroll-container');
         if (scrollArea) scrollArea.scrollTop = 0;
     }
 }
 
-// 에러 모달 함수
-function showAlert(msg) {
-    const overlay = document.getElementById('custom-alert');
-    const messageTag = document.getElementById('alert-message');
-    if (overlay && messageTag) {
-        messageTag.innerText = msg;
-        overlay.style.display = 'block';
-    }
-}
-
 function closeAlert() {
-    const overlay = document.getElementById('custom-alert');
-    if (overlay) {
-        overlay.style.display = 'none';
-        const pwInput = document.getElementById('password-input');
-        pwInput.value = "";
-        pwInput.focus();
-    }
+    document.getElementById('custom-alert').style.display = 'none';
+    document.getElementById('password-input').value = "";
 }
 
-// 비밀번호 체크 로직
-function checkPassword() {
-    const input = document.getElementById('password-input').value;
-    const correctPassword = "1234abcd";
-
-    if (input === correctPassword) {
-        goToPage('page1');
-    } else {
-        showAlert("Chave de acesso incorreta. Verifique a chave digitada.");
-    }
-}
-
-// --- 새로 추가된 이미지 변경 및 화면 잠금 함수 ---
-function handleImageChangeAndLock() {
+// 3. 이미지 변경 및 화면 잠금 (3페이지 전용)
+function handleImageLock() {
     const targetImg = document.getElementById('target-img');
     const overlay = document.getElementById('locking-overlay');
     const page3 = document.getElementById('page3');
 
-    if (!targetImg || !overlay || !page3) return;
-
-    // 1. 이미지 소스 변경 (fechar.png로 가정)
-    // dcmf 폴더 밑에 \potos\images\ 경로이므로 상대 경로는 아래와 같습니다.
-    // 만약 fechar 이미지의 확장자가 png가 아니라면 아래 부분을 수정하세요.
-    targetImg.src = 'potos/images/fechar.png';
-
-    // 2. 화면 전체 터치 잠금
-    overlay.style.display = 'block'; // 투명 오버레이를 활성화하여 모든 터치를 차단
-    page3.classList.add('locked');    // CSS를 통한 스크롤 및 버튼 조작 차단
+    // fechar.gif로 이미지 변경
+    if (targetImg) targetImg.src = 'potos/images/fechar.gif';
     
-    console.log('이미지가 변경되고 화면이 잠겼습니다.');
+    // 터치 방지 레이어 활성화
+    if (overlay) overlay.style.display = 'block';
+    
+    // 스크롤도 완전히 막음
+    const scrollContainer = page3.querySelector('.scroll-container');
+    const sliderContainer = page3.querySelector('.middle-frame-wrapper');
+    if (scrollContainer) scrollContainer.style.overflowY = 'hidden';
+    if (sliderContainer) sliderContainer.style.overflowX = 'hidden';
+
+    console.log("잠금 활성화: fechar.gif 표시됨");
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1페이지 관련 이벤트
-    const pwInput = document.getElementById('password-input');
-    if (pwInput) {
-        pwInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') checkPassword(); });
-    }
+// 이벤트 초기화
+window.addEventListener('resize', resizeApp);
+window.addEventListener('load', resizeApp);
 
-    // --- 3페이지 특정 이미지 변경 및 잠금 이벤트 설정 ---
+document.addEventListener('DOMContentLoaded', () => {
+    resizeApp();
+
+    // 3페이지 첫번째 이미지 클릭 시 잠금 이벤트 연결
     const targetImg = document.getElementById('target-img');
     if (targetImg) {
-        // 모바일/데스크톱 모두 대응을 위해 click 이벤트를 사용합니다. (모바일에서 터치로 작동)
-        targetImg.addEventListener('click', handleImageChangeAndLock);
+        targetImg.addEventListener('click', handleImageLock, { once: true });
     }
 
-    // 3페이지 슬라이더 관련 이벤트
+    // 슬라이더 도트 연동
     const slider = document.getElementById('slider');
     const dots = document.querySelectorAll('.dot');
-    const page3 = document.getElementById('page3');
-
     if (slider) {
-        // 슬라이드 스크롤에 따른 점 표시 변경
         slider.addEventListener('scroll', () => {
-            // 잠금 상태일 때는 점 변경 로직을 타지 않음
-            if (page3.classList.contains('locked')) return; 
-
-            const index = Math.round(slider.scrollLeft / slider.clientWidth);
-            dots.forEach((dot, i) => i === index ? dot.classList.add('active') : dot.classList.remove('active'));
+            const index = Math.round(slider.scrollLeft / 1080);
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
         });
-
-        // 수동 슬라이드 조작 로직
-        let startX;
-        slider.addEventListener('touchstart', (e) => { 
-            startX = e.touches[0].pageX; 
-        }, {passive: true});
-
-        slider.addEventListener('touchend', (e) => {
-            // 잠금 상태일 때는 슬라이드 이동 로직을 타지 않음
-            if (page3.classList.contains('locked')) return; 
-
-            let endX = e.changedTouches[0].pageX;
-            let diff = startX - endX;
-            if (Math.abs(diff) > 30) {
-                // 고정 수치 1080 대신 기기 너비(slider.clientWidth)만큼 이동합니다.
-                if (diff > 0) slider.scrollBy({ left: slider.clientWidth, behavior: 'smooth' });
-                else slider.scrollBy({ left: -slider.clientWidth, behavior: 'smooth' });
-            }
-        }, {passive: true});
     }
 
-    // 멀티터치(줌) 방지
-    document.addEventListener('touchstart', (e) => { 
-        if (e.touches.length > 1) e.preventDefault(); 
-    }, { passive: false });
+    // 엔터키 지원
+    document.getElementById('password-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleLogin();
+    });
 });

@@ -2,90 +2,86 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mobile Homepage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Full Screen Mobile</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
 
-    <section id="login-page" class="page active">
-        <div class="content-bg">
-            <img src="potos/images/enter.gif" alt="로그인 배경">
-            <div class="login-container">
-                <input type="password" id="password-input" maxlength="15">
-                <button id="login-btn" onclick="checkPassword()"></button>
-            </div>
-        </div>
-        <div id="custom-alert" class="alert-overlay">
-            <div class="alert-box">
-                <div class="error-circle"><span class="x-mark">✕</span></div>
-                <p id="alert-message">Chave de acesso incorreta. Verifique a chave digitada.</p>
-                <button id="ok-btn" onclick="closeAlert()">OK</button>
-            </div>
-        </div>
-    </section>
-
-    <section id="page1" class="page">
-        <div class="content-bg">
-            <img src="potos/images/im1.gif" alt="배경이미지1">
-            <div class="button-column">
-                <button onclick="goToPage('page2')">Page 2로 이동</button>
-                <button>버튼 1-2</button>
-                <button>버튼 1-3</button>
-                <button>버튼 1-4</button>
-            </div>
-        </div>
-    </section>
-
-    <section id="page2" class="page">
-        <button class="back-button" onclick="goToPage('page1')"></button>
-        <div class="content-bg">
-            <img src="potos/images/im2.gif" alt="배경이미지2">
-            <div class="button-grid">
-                <div class="col">
-                    <button onclick="goToPage('page3')">Page 3으로 이동</button>
-                    <button>버튼 2-2</button>
-                    <button>버튼 2-3</button>
-                </div>
-                <div class="col">
-                    <button>버튼 2-4</button>
-                    <button>버튼 2-5</button>
+    <div id="app-container">
+        <!-- 로그인 페이지 -->
+        <section id="login-page" class="page active">
+            <div class="content-bg">
+                <img src="potos/images/enter.gif" alt="Enter">
+                <div class="login-container">
+                    <input type="password" id="password-input" maxlength="15">
+                    <button id="login-btn" onclick="handleLogin()"></button>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <section id="page3" class="page">
-        <button id="page3-back-btn" class="back-button" onclick="goToPage('page2')" style="z-index: 1000;"></button>
-        
-        <header class="top-frame">
-            <img src="potos/images/im3-top.gif" alt="상단이미지">
-        </header>
-        
-        <main class="scroll-container">
-            <div class="middle-frame-wrapper" id="slider">
-                <div class="middle-slider">
-                    <div class="slide"><img id="target-img" src="potos/images/im3-cent/im3-1.gif" alt="중앙1"></div>
-                    <div class="slide"><img src="potos/images/im3-cent/im3-2.gif" alt="중앙2"></div>
-                    <div class="slide"><img src="potos/images/im3-cent/im3-3.gif" alt="중앙3"></div>
-                    <div class="slide"><img src="potos/images/im3-cent/im3-4.gif" alt="중앙4"></div>
+            <div id="custom-alert" class="alert-overlay">
+                <div class="alert-box">
+                    <div class="error-circle"><span class="x-mark">✕</span></div>
+                    <p id="alert-message">Chave de acesso incorreta.</p>
+                    <button id="ok-btn" onclick="closeAlert()">OK</button>
                 </div>
             </div>
+        </section>
+
+        <!-- 페이지 1 -->
+        <section id="page1" class="page">
+            <div class="content-bg">
+                <img src="potos/images/im1.gif" alt="Page 1">
+                <div class="button-column">
+                    <button onclick="goToPage('page2')"></button>
+                    <button></button><button></button><button></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 페이지 2 -->
+        <section id="page2" class="page">
+            <button class="back-button" onclick="goToPage('page1')"></button>
+            <div class="content-bg">
+                <img src="potos/images/im2.gif" alt="Page 2">
+                <div class="button-grid">
+                    <div class="col">
+                        <button onclick="goToPage('page3')"></button>
+                        <button></button><button></button>
+                    </div>
+                    <div class="col">
+                        <button></button><button></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 페이지 3 -->
+        <section id="page3" class="page">
+            <button class="back-button" onclick="goToPage('page2')" style="z-index: 1000;"></button>
+            <header class="top-frame">
+                <img src="potos/images/im3-top.gif" alt="Top">
+            </header>
             
-            <div class="dots-container">
-                <span class="dot active"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-            </div>
-
-            <footer class="bottom-frame">
-                <img src="potos/images/im3-batt.gif" alt="하단이미지">
-            </footer>
-        </main>
-        
-        <div id="locking-overlay" class="locking-overlay"></div>
-    </section>
+            <main class="scroll-container">
+                <div class="middle-frame-wrapper" id="slider">
+                    <div class="middle-slider">
+                        <div class="slide"><img id="target-img" src="potos/images/im3-cent/im3-1.gif" alt="Slide 1"></div>
+                        <div class="slide"><img src="potos/images/im3-cent/im3-2.gif" alt="Slide 2"></div>
+                        <div class="slide"><img src="potos/images/im3-cent/im3-3.gif" alt="Slide 3"></div>
+                        <div class="slide"><img src="potos/images/im3-cent/im3-4.gif" alt="Slide 4"></div>
+                    </div>
+                </div>
+                <div class="dots-container">
+                    <span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                </div>
+                <footer class="bottom-frame">
+                    <img src="potos/images/im3-batt.gif" alt="Bottom">
+                </footer>
+            </main>
+            <!-- 화면 잠금 레이어 -->
+            <div id="locking-overlay"></div>
+        </section>
+    </div>
 
     <script src="script.js"></script>
 </body>

@@ -1,106 +1,81 @@
-/* 기본 초기화 및 확대 방지 */
-* { margin: 0; padding: 0; box-sizing: border-box; touch-action: pan-y; }
+/* 기본 설정 */
+* { margin: 0; padding: 0; box-sizing: border-box; touch-action: none; }
+html, body { 
+    width: 100%; height: 100%; overflow: hidden; background: #000; 
+    display: flex; justify-content: center; align-items: center;
+}
 
-/* 너비를 100%로 변경하여 기기 화면에 맞춥니다. */
-body { width: 100%; overflow-x: hidden; background: #000; -webkit-user-select: none; user-select: none; }
+/* 1080x2211 원본 크기 유지 및 중앙 정렬 */
+#app-container {
+    width: 1080px; height: 2211px;
+    position: relative;
+    transform-origin: center center;
+    flex-shrink: 0;
+}
 
-/* 스크롤바 제거 */
-.scroll-container, .middle-frame-wrapper { -ms-overflow-style: none; scrollbar-width: none; }
-.scroll-container::-webkit-scrollbar, .middle-frame-wrapper::-webkit-scrollbar { display: none !important; }
-
-/* 페이지 너비를 100%로 변경합니다. */
-.page { display: none; width: 100%; position: relative; overflow: hidden; }
+.page { display: none; width: 1080px; height: 2211px; position: absolute; top: 0; left: 0; overflow: hidden; background: #fff; }
 .page.active { display: block; }
 
-/* 비밀번호 입력창 및 컨테이너를 가변적으로 조절합니다. */
+/* 배경 이미지들 */
+.content-bg img { width: 1080px; height: 2211px; object-fit: cover; position: absolute; top: 0; left: 0; }
+
+/* 로그인 UI */
 .login-container {
     position: absolute; top: 44.5%; left: 50%; transform: translate(-50%, -50%);
-    display: flex; flex-direction: column; align-items: center; width: 100%; gap: 5vw; z-index: 1000;
+    display: flex; flex-direction: column; align-items: center; gap: 40px; z-index: 1000;
 }
 #password-input {
-    width: 60%; height: 12vw; font-size: 6vw; text-align: center;
-    border: none; background: transparent; 
-    color: #000; caret-color: #000; outline: none;
+    width: 600px; height: 120px; font-size: 60px; text-align: center;
+    border: none; background: transparent; color: #000; outline: none;
 }
-#login-btn { width: 30%; height: 11vw; border: none; background: transparent; cursor: pointer; }
+#login-btn { width: 300px; height: 110px; border: none; background: transparent; cursor: pointer; }
 
-/* 에러 창 디자인 */
+/* 버튼 레이아웃 */
+.back-button { position: absolute; width: 120px; height: 120px; top: 155px; left: 110px; transform: translate(-50%, -50%); border: none; background: transparent; z-index: 1000; }
+.button-column { position: absolute; top: 42.5%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; gap: 50px; }
+.button-column button { width: 995px; height: 277px; background: transparent; border: none; }
+
+.button-grid { position: absolute; top: 71%; left: 50%; transform: translate(-50%, -50%); display: flex; gap: 40px; }
+.button-grid .col { display: flex; flex-direction: column; gap: 20px; }
+.button-grid button { width: 478px; height: 321px; background: transparent; border: none; }
+
+/* 3페이지 슬라이더 구조 */
+.top-frame { width: 1080px; height: 252px; position: absolute; top: 0; left: 0; z-index: 100; }
+.scroll-container { width: 1080px; height: 2211px; overflow-y: auto; position: relative; scrollbar-width: none; }
+.scroll-container::-webkit-scrollbar { display: none; }
+
+.middle-frame-wrapper { 
+    width: 1080px; height: 1646px; margin-top: 252px; 
+    overflow-x: scroll; display: flex; scroll-snap-type: x mandatory; 
+    scrollbar-width: none;
+}
+.middle-frame-wrapper::-webkit-scrollbar { display: none; }
+.middle-slider { display: flex; width: 4320px; }
+.slide { width: 1080px; height: 1646px; scroll-snap-align: start; }
+.slide img { width: 1080px; height: 1646px; display: block; }
+
+.dots-container { width: 1080px; height: 100px; display: flex; justify-content: center; align-items: center; gap: 15px; background: #fff; }
+.dot { width: 15px; height: 15px; background: rgba(0,0,0,0.15); border-radius: 50%; }
+.dot.active { background: #000080; }
+.bottom-frame img { width: 1080px; height: 789px; display: block; }
+
+/* 잠금 레이어 (화면 터치 방지) */
+#locking-overlay { 
+    display: none; position: absolute; top: 0; left: 0; 
+    width: 1080px; height: 2211px; z-index: 9999; background: transparent; 
+}
+
+/* 알림창 스타일 */
 .alert-overlay {
-    display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    display: none; position: absolute; top: 0; left: 0; width: 1080px; height: 2211px;
     background: rgba(0, 0, 0, 0.4); z-index: 3000;
 }
 .alert-box {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 90%; background: #F8F9FA; border-radius: 40px; 
-    border: 1px solid #D1D1D1; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    display: flex; flex-direction: column; align-items: center; padding: 60px 20px 40px 20px;
+    width: 900px; background: #F8F9FA; border-radius: 80px; padding: 100px 40px;
+    display: flex; flex-direction: column; align-items: center; border: 2px solid #D1D1D1;
 }
-.error-circle {
-    width: 100px; height: 100px; background-color: #D93025;
-    border-radius: 50%; display: flex; justify-content: center; align-items: center;
-    position: absolute; top: -50px; border: 8px solid #F8F9FA;
-}
-.x-mark { color: white; font-size: 50px; font-weight: bold; }
-.alert-box p { 
-    font-size: 18px; color: #0D3B7A; font-weight: 600; line-height: 1.4;
-    text-align: center; margin-bottom: 40px; width: 100%; 
-}
-#ok-btn { 
-    width: 100%; height: 50px; font-size: 18px; font-weight: bold;
-    color: white; background: #1557C0; border: none; 
-    border-radius: 25px;
-}
-
-/* 이미지 및 레이아웃 반응형 수정 */
-.content-bg img { width: 100%; height: auto; min-height: 100vh; object-fit: cover; display: block; }
-.back-button { position: absolute; width: 10vw; height: 10vw; top: 8%; left: 10%; transform: translate(-50%, -50%); border: none; background: transparent; opacity: 0; z-index: 500; }
-
-#page1 .button-column { position: absolute; top: 42.5%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; width: 92%; gap: 2vh; }
-#page1 button:not(.back-button) { width: 100%; height: 12.5vh; background: transparent; border: none; opacity: 0; }
-
-#page2 .button-grid { position: absolute; top: 71%; left: 50%; transform: translate(-50%, -50%); display: flex; width: 90%; gap: 4%; }
-#page2 button:not(.back-button) { width: 100%; height: 14.5vh; background: transparent; border: none; opacity: 0; }
-#page2 .col { flex: 1; display: flex; flex-direction: column; gap: 20px; }
-
-/* 3페이지 레이아웃 반응형 수정 */
-#page3 { position: relative; width: 100%; height: 100vh; }
-#page3 .top-frame { width: 100%; height: auto; position: absolute; top: 0; left: 0; z-index: 100; }
-#page3 .top-frame img { width: 100%; height: auto; }
-#page3 .scroll-container { width: 100%; height: 100vh; overflow-y: auto; position: relative; background: #fff; }
-
-.middle-frame-wrapper { 
-    width: 100%; height: auto; margin-top: 23%; overflow-x: scroll; scroll-snap-type: x mandatory; display: flex; 
-    background: #fff;
-}
-.middle-slider { display: flex; width: 400%; }
-.slide { width: 100vw; height: auto; scroll-snap-align: start; }
-.slide img { display: block; width: 100%; height: auto; }
-
-.dots-container { 
-    width: 100%; height: 50px;
-    display: flex; justify-content: center; align-items: center; gap: 10px; 
-    background: #fff;
-}
-.dot { width: 10px; height: 10px; background-color: rgba(0, 0, 0, 0.15); border-radius: 50%; }
-.dot.active { background-color: #000080; }
-
-.bottom-frame { width: 100%; height: auto; }
-.bottom-frame img { width: 100%; height: auto; display: block; }
-
-/* --- 새로 추가된 화면 잠금 CSS --- */
-
-/* 화면 조작을 막는 최상위 투명 레이어 */
-.locking-overlay {
-    display: none; /* 기본적으로 숨김 */
-    position: fixed; /* 뷰포트에 고정 */
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: rgba(0, 0, 0, 0); /* 완전 투명 */
-    z-index: 9999; /* 다른 모든 요소보다 위에 배치 (에러창 z-index 3000보다 큼) */
-    pointer-events: auto; /* 모든 터치 이벤트를 막음 */
-}
-
-/* 잠금 상태 스타일 (스크롤 불가, 버튼 조작 불가) */
-.page.locked #slider { overflow-x: hidden !important; }
-.page.locked .scroll-container { overflow-y: hidden !important; }
-.page.locked .back-button { pointer-events: none !important; opacity: 0; }
+.error-circle { width: 200px; height: 200px; background: #D93025; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 50px; }
+.x-mark { color: #fff; font-size: 100px; }
+.alert-box p { font-size: 40px; color: #0D3B7A; font-weight: bold; margin-bottom: 60px; }
+#ok-btn { width: 700px; height: 120px; background: #1557C0; color: #fff; border: none; border-radius: 60px; font-size: 40px; font-weight: bold; }
