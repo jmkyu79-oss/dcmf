@@ -109,7 +109,7 @@ html, body {
     width: 100%; 
     height: 100%; 
     /* fill 대신 cover를 사용하면 비율을 유지하며 화면을 가득 채웁니다 */
-    object-fit: cover; 
+    object-fit: fill; 
     /* 만약 이미지가 잘리는 게 싫고 무조건 다 보여야 한다면 다시 fill로 두세요 */
 }
 
