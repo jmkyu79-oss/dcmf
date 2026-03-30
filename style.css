@@ -63,13 +63,51 @@ html, body {
 } 
 .slide img { width: 1080px; height: 1646px; object-fit: cover; }
 
-/* 로그인 입력창 및 버튼 레이아웃 */
+/* 로그인 입력창 및 버튼 레이아웃 
 .login-container { 
     position: absolute; top: 43.5%; left: 50%; transform: translate(-50%, -50%); 
     z-index: 100; display: flex; flex-direction: column; align-items: center; 
+} */
+
+/* 비밀번호 입력창 개별 위치 설정 */
+#password-input { 
+    position: absolute;
+    top: 23.5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px; 
+    height: 120px; 
+    font-size: 60px; 
+    text-align: center; 
+    
+    /* [수정 핵심] */
+    border: none !important;       /* 선을 강제로 없앰 */
+    background: none !important;     /* 배경색을 강제로 없앰 */
+    background-color: transparent;   /* 투명 배경 설정 */
+    appearance: none;               /* 브라우저 기본 스타일 제거 */
+    -webkit-appearance: none;       /* 아이폰/크롬용 기본 스타일 제거 */
+    
+    outline: none; 
+    z-index: 101;
 }
-#password-input { width: 600px; height: 120px; font-size: 60px; text-align: center; border: none; background: transparent; outline: none; }
-#login-btn { width: 300px; height: 110px; border: none; background: transparent; cursor: pointer; }
+
+/* 로그인 버튼 개별 위치 설정 */
+#login-btn { 
+    position: absolute;
+    top: 31.5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px; 
+    height: 100px; 
+    
+    /* [수정 핵심] */
+    border: none !important; 
+    background: none !important;
+    background-color: transparent;
+    
+    cursor: pointer; 
+    z-index: 101;
+}
 
 /* 뒤로가기 버튼 스타일 */
 .back-button { position: absolute; width: 120px; height: 120px; top: 155px; left: 110px; transform: translate(-50%, -50%); border: none; background: transparent; z-index: 500; }
