@@ -33,16 +33,43 @@
             </div>
         </section>
 
-        <!-- 페이지 1: 메뉴 페이지 -->
-        <section id="page1" class="page">
-            <div class="content-bg">
-                <img src="potos/images/im1.gif">
-                <div class="button-column">
-                    <button onclick="goToPage('page2')"></button>
-                    <button></button><button></button><button></button>
-                </div>
-            </div>
-        </section>
+<!-- 1페이지 와 [메인 메뉴] 버튼 1, 2, 3, 4 연결 -->
+<section id="page1" class="page">
+    <div class="content-bg">
+        <img src="potos/images/im1.gif">
+        <div class="button-column">
+            <button onclick="goToPage('page2')"></button>   <!-- 버튼 1 -> im2.gif -->
+            <button onclick="goToPage('page1-2')"></button> <!-- 버튼 2 -> im1-2.gif -->
+            <button onclick="goToPage('page1-3')"></button> <!-- 버튼 3 -> im1-3.gif -->
+            <button onclick="goToPagewindow.location.href='https://www.gov.br/transportes/pt-br/cnh-do-brasil'"></button> <!-- 버튼 4 -> im1-4.gif -->
+        </div>
+    </div>
+</section>
+
+<!-- [버튼 2 클릭 시] im1-2.gif 페이지 -->
+<section id="page1-2" class="page">
+    <!-- 이 버튼이 im1-2.gif 이미지 위의 뒤로가기 화살표 자리에 위치하게 됩니다 -->
+    <button class="back-button" onclick="goToPage('page1')"></button>
+    <div class="content-bg">
+        <img src="potos/images/im1-2.gif">
+    </div>
+</section>
+
+<!-- [버튼 3 클릭 시] im1-3.gif 페이지 -->
+<section id="page1-3" class="page">
+    <button class="back-button" onclick="goToPage('page1')"></button>
+    <div class="content-bg">
+        <img src="potos/images/im1-3.gif">
+    </div>
+</section>
+
+<!-- [버튼 4 클릭 시] im1-4.gif 페이지 --
+<section id="page1-4" class="page">
+    <button class="back-button" onclick="goToPage('page1')"></button>
+    <div class="content-bg">
+        <img src="potos/images/im1-4.gif">
+    </div>
+</section> -->
 
         <!-- 페이지 2: 상세 메뉴 페이지 -->
         <section id="page2" class="page">
