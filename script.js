@@ -9,6 +9,15 @@ function resizeApp() {
     container.style.transform = `scale(${scaleX}, ${scaleY})`;
 }
 
+function openExternalLink(url) {
+    // 만약 전체화면 모드라면 해제하고 이동 (충돌 방지)
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+    }
+    // 새 탭으로 열기 (가장 안전한 방법)
+    window.open(url, '_blank');
+}
+
 /**
  * 현재 시간을 브라질 형식(DD/MM/YYYY - HH:mm:ss)으로 표시하는 함수
  */
