@@ -25,14 +25,7 @@
             <!-- 로그인 버튼 -->
             <button id="login-btn" onclick="handleLogin()"></button>
           </div>
-            <!-- 에러 메시지 알림창 (errer.gif와 동일한 문구 및 줄바꿈) -->
-            <div id="custom-alert" class="alert-overlay">
-                <div class="alert-box">
-                    <div class="error-circle"><span class="x-mark">✕</span></div>
-                    <p class="error-text">Chave de acesso incorreta. Verifique a<br>chave digitada.</p>
-                    <button id="ok-btn" onclick="closeAlert()">OK</button>
-                </div>
-            </div>
+ 
         </section>
 
 <!-- 1페이지 와 [메인 메뉴] 버튼 1, 2, 3, 4 연결 -->
@@ -55,6 +48,43 @@
     <button class="back-button" onclick="goToPage('page1')"></button>
     <div class="content-bg">
         <img src="potos/images/im1-2.gif">
+    </div>
+</section>
+
+<!-- [버튼 3 클릭 시] im1-3.gif 페이지 -->
+<section id="page1-3" class="page">
+    <button class="back-button" onclick="goToPage('page1')"></button>
+    <div class="content-bg">
+        <img src="potos/images/im1-3.gif">
+    </div>
+</section>
+
+<!-- [버튼 4 클릭 시] im1-4.gif 페이지 --
+<section id="page1-4" class="page">
+    <button class="back-button" onclick="goToPage('page1')"></button>
+    <div class="content-bg">
+        <img src="potos/images/im1-4.gif">
+    </div>
+</section> -->
+
+<!-- 페이지 2: 상세 메뉴 페이지 -->
+<section id="page2" class="page">
+    <button class="back-button" onclick="goToPage('page1')"></button>
+    <div class="content-bg">
+        <img src="potos/images/im2.gif">
+        <div class="button-grid">
+            <div class="col">
+                <!-- 왼쪽 컬럼 버튼 3개 -->
+                <button onclick="goToPage('page3')"></button>   <!-- 버튼 1 -->
+                <button onclick="goToPage('page2-2')"></button> <!-- 버튼 2 추가 -->
+                <button onclick="goToPage('page2-3')"></button> <!-- 버튼 3 추가 -->
+            </div>
+            <div class="col">
+                <!-- 오른쪽 컬럼 버튼 2개 -->
+                <button onclick="goToPage('page2-4')"></button> <!-- 버튼 4 추가 -->
+                <button onclick="goToPage('page2-5')"></button> <!-- 버튼 5 추가 -->
+            </div>
+        </div>
     </div>
 </section>
 
@@ -90,39 +120,6 @@
     </div>
 </section>
 
-<!-- [버튼 3 클릭 시] im1-3.gif 페이지 -->
-<section id="page1-3" class="page">
-    <button class="back-button" onclick="goToPage('page1')"></button>
-    <div class="content-bg">
-        <img src="potos/images/im1-3.gif">
-    </div>
-</section>
-
-<!-- [버튼 4 클릭 시] im1-4.gif 페이지 --
-<section id="page1-4" class="page">
-    <button class="back-button" onclick="goToPage('page1')"></button>
-    <div class="content-bg">
-        <img src="potos/images/im1-4.gif">
-    </div>
-</section> -->
-
-        <!-- 페이지 2: 상세 메뉴 페이지 -->
-        <section id="page2" class="page">
-            <button class="back-button" onclick="goToPage('page1')"></button>
-            <div class="content-bg">
-                <img src="potos/images/im2.gif">
-                <div class="button-grid">
-                    <div class="col">
-                        <button onclick="goToPage('page3')"></button>
-                        <button></button><button></button>
-                    </div>
-                    <div class="col">
-                        <button></button><button></button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- 페이지 3: 메인 스크롤 및 슬라이더 페이지 -->
         <section id="page3" class="page">
             <button class="back-button" onclick="goToPage('page2')" style="z-index: 1001;"></button>
@@ -152,9 +149,16 @@
                     <span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
                 </div>
                 <!-- 하단 프레임 -->
-                <footer class="bottom-frame">
+                  <footer class="bottom-frame">
                     <img src="potos/images/im3-batt.gif">
-                </footer>
+                       <!-- 세로 버튼 열 컨테이너 -->
+                     <div class="bottom-button-column">
+                      <button onclick="goToPage('page3-1')"></button>
+                      <button onclick="goToPage('page3-2')"></button>
+                      <button onclick="goToPage('page3-3')"></button>
+                      <button onclick="showPopup4()"></button>
+                     </div>
+                  </footer>
             </main>
 
             <!-- 잠금 화면 레이어 (fechar.gif) -->
@@ -167,8 +171,84 @@
             
             <!-- 잠금 해제 버튼 (화면 최상단 레이어, 위치: 1830px 중앙) -->
             <button id="unlock-btn" onclick="unlockApp()"></button>
+
+
+            <!-- im3-4.gif를 잠깐 띄웠다가 없애는 팝업레이어 -->
+            <div id="popup-overlay-4" class="popup-overlay">
+              <img src="potos/images/im3-4.gif" alt="Popup Image">
+            </div>
+
         </section>
+
+<!-- [추가] im3-1 ~ im3-4 상세 이미지 페이지들 -->
+<!-- [수정] im3-1 상세 페이지 섹션 -->
+<section id="page3-1" class="page">
+    <button class="back-button" onclick="goToPage('page3')"></button>
+    
+    <div class="content-bg">
+        <!-- 배경 이미지 -->
+        <img src="potos/images/im3-1.gif"> 
+
+        <!-- 배경 위 클릭 버튼 (박스가 아니라 이 버튼을 누르면 슬라이더가 나타남) -->
+        <button id="open-slider-btn" onclick="openSliderV2()"></button> 
+
+        <!-- [핵심] 슬라이더 컨테이너: 내부에 이미지 4개를 직접 배치 -->
+        <div class="slider-container-v2" id="slider-container-v2" style="display: none;">
+            <div class="slider-wrapper-v2" id="slider-wrapper-v2">
+                <img src="potos/images/im3-1-1.gif" class="slide-v2">
+                <img src="potos/images/im3-1-2.gif" class="slide-v2">
+                <img src="potos/images/im3-1-3.gif" class="slide-v2">
+                <img src="potos/images/im3-1-4.gif" class="slide-v2">
+            </div>
+        </div>
+
+        <!-- 하단 파란 점 (인디케이터) -->
+        <div class="pagination-v2" id="pagination-v2" style="display: none;">
+            <span class="dot-v2 active"></span>
+            <span class="dot-v2"></span>
+            <span class="dot-v2"></span>
+            <span class="dot-v2"></span>
+        </div>
     </div>
+</section>
+
+<section id="page3-2" class="page">
+    <button class="back-button" onclick="goToPage('page3')"></button>
+    <div class="content-bg"><img src="potos/images/im3-2.gif"></div>
+</section>
+
+<section id="page3-3" class="page">
+    <button class="back-button" onclick="goToPage('page3')"></button>
+    <div class="content-bg">
+        <img src="potos/images/im3-3.gif">
+        
+        <!-- im3-3 전용 비밀번호 입력창 -->
+        <input type="password" id="fake-password-input" maxlength="15">
+        
+        <!-- im3-3 전용 확인 버튼 (무조건 에러 발생) -->
+        <button id="fake-login-btn" onclick="handleFakeLogin()"></button>
+    </div>
+</section>
+
+<section id="page3-4" class="page">
+    <button class="back-button" onclick="goToPage('page3')"></button>
+    <div class="content-bg"><img src="potos/images/im3-4.gif"></div>
+</section>
+
+
+           <!-- 에러 메시지 알림창 (errer.gif와 동일한 문구 및 줄바꿈) -->
+            <div id="custom-alert" class="alert-overlay">
+                <div class="alert-box">
+                    <div class="error-circle"><span class="x-mark">✕</span></div>
+                    <p class="error-text">Chave de acesso incorreta. Verifique a<br>chave digitada.</p>
+                    <button id="ok-btn" onclick="closeAlert()">OK</button>
+                </div>
+            </div>
+
+
+<!-- 깜빡임 효과용 레이어 추가 -->
+    <div id="flash-overlay"></div>
+
 
     <script src="script.js"></script>
 </body>

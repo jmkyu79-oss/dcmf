@@ -63,10 +63,14 @@ html, body {
 } 
 .slide img { width: 1080px; height: 1646px; object-fit: cover; }
 
-/* 비밀번호 입력창 개별 위치 설정 */
+
+
+
+
+/* 비밀번호 입력창 개별 위치 설정 
 #password-input { 
     position: absolute;
-    top: 23.5%;
+    top: 26.4%;
     left: 50%;
     transform: translateX(-50%);
     width: 600px; 
@@ -74,13 +78,197 @@ html, body {
     font-size: 60px; 
     text-align: center; 
     
-    /* [수정 핵심] */
-    border: none !important;       /* 선을 강제로 없앰 */
-    background: none !important;     /* 배경색을 강제로 없앰 */
-    background-color: transparent;   /* 투명 배경 설정 */
-    appearance: none;               /* 브라우저 기본 스타일 제거 */
-    -webkit-appearance: none;       /* 아이폰/크롬용 기본 스타일 제거 */
+    /* [수정 핵심: 테두리 보이게 설정] 
+    border: 3px solid red !important;  /* 빨간색 실선 추가 
+    background: rgba(255, 0, 0, 0.1);  /* 위치 확인을 위해 연한 빨간 배경 추가 
     
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none; 
+    z-index: 101;
+}
+
+/* 로그인 버튼 개별 위치 설정 
+#login-btn { 
+    position: absolute;
+    top: 34.5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px; 
+    height: 100px; 
+    
+    /* [수정 핵심: 테두리 보이게 설정] 
+    border: 3px solid blue !important; /* 파란색 실선 추가 
+    background: rgba(0, 0, 128, 0.1);  /* 위치 확인을 위해 연한 파란 배경 추가 
+    
+    cursor: pointer; 
+    z-index: 101;
+} */
+
+
+/* im3-3 입력창: 위치 잡기용 빨간 테두리 
+#fake-password-input { 
+    position: absolute;
+    top: 28.6%; /* 이미지를 보며 이 숫자를 조절하세요 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px; 
+    height: 120px; 
+    font-size: 60px; 
+    text-align: center; 
+    
+    border: 4px solid red !important;       /* 빨간색 테두리 
+    background: rgba(255, 0, 0, 0.1) !important; /* 연한 빨간 배경 
+    
+    appearance: none;
+    outline: none; 
+    z-index: 101;
+}
+
+/* im3-3 버튼: 위치 잡기용 파란 테두리 
+#fake-login-btn { 
+    position: absolute;
+    top: 36.7%; /* 이미지를 보며 이 숫자를 조절하세요 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px; 
+    height: 100px; 
+    
+    border: 4px solid blue !important;      /* 파란색 테두리 
+    background: rgba(0, 0, 255, 0.1) !important; /* 연한 파란 배경 
+    
+    cursor: pointer; 
+    z-index: 101;
+} */
+
+
+
+/* im3-3 전용 입력창 위치 (위치가 안 맞으면 top 값을 수정하세요) */
+#fake-password-input { 
+    position: absolute;
+    top: 28.6%; /* 로그인 페이지와 동일하게 설정됨 */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px; 
+    height: 120px; 
+    font-size: 60px; 
+    text-align: center; 
+    border: none !important;
+    background: transparent !important;
+    outline: none; 
+    z-index: 101;
+}
+
+/* im3-3 전용 버튼 위치 */
+#fake-login-btn { 
+    position: absolute;
+    top: 36.7%; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px; 
+    height: 100px; 
+    border: none !important; 
+    background: transparent !important;
+    cursor: pointer; 
+    z-index: 101;
+} 
+
+
+
+
+/* 입력창에 커서가 항상 깜빡이도록 포커스 효과 유지 */
+#fake-password-input:focus {
+    outline: none; /* 기본 파란 테두리는 제거 */
+    border: none !important; /* 현재 위치 확인용 빨간색 유지 */
+}
+
+/* 커서 색상을 지정하고 싶다면 (선택 사항) */
+#fake-password-input {
+    caret-color: black; /* 커서 색상을 검은색으로 설정 */
+}
+
+
+
+
+
+
+
+/* 팝업 오버레이 기본 스타일 (숨김 상태) */
+.popup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1080px;  /* 3페이지와 동일한 크기 */
+    height: 2211px; /* 3페이지와 동일한 크기 */
+    background-color: rgba(0, 0, 0, 0); /* 완전 투명 배경 */
+    display: flex;
+    justify-content: center; /* 이미지 가로 중앙 정렬 */
+    align-items: center;     /* 이미지 세로 중앙 정렬 */
+    z-index: 2000;           /* 다른 요소들보다 위에 배치 */
+    
+    /* 페이드 효과를 위한 기본 설정 */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1.5s ease, visibility 1.5s ease; /* 1초 페이드 */
+}
+
+/* 팝업이 활성화되었을 때 상태 */
+.popup-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 팝업 내부 이미지 스타일 (필요시 조절) */
+.popup-overlay img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* 이미지가 비율 깨지지 않게 */
+}
+
+
+
+/* 깜빡임 효과 레이어 */
+#flash-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1080px;
+    height: 2211px;
+    background-color: white;
+    opacity: 0; /* 평소에는 투명 */
+    pointer-events: none; /* 클릭 방해 금지 */
+    z-index: 999999; /* 최상단 배치 */
+}
+
+/* 깜빡임 애니메이션 클래스 */
+.flash-active {
+    animation: flash-animation 0.5s ease-out;
+}
+
+@keyframes flash-animation {
+    0% { opacity: 0.8; }
+    100% { opacity: 0; }
+}
+
+
+
+/* 비밀번호 입력창 개별 위치 설정 */
+#password-input { 
+    position: absolute;
+    top: 26.4%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px; 
+    height: 120px; 
+    font-size: 60px; 
+    text-align: center; 
+    
+    /* [투명화 설정] */
+    border: none !important;           /* 외각선을 완전히 지움 */
+    background: transparent !important; /* 배경색을 투명하게 설정 */
+    
+    appearance: none;
+    -webkit-appearance: none;
     outline: none; 
     z-index: 101;
 }
@@ -88,16 +276,15 @@ html, body {
 /* 로그인 버튼 개별 위치 설정 */
 #login-btn { 
     position: absolute;
-    top: 31.5%;
+    top: 34.5%;
     left: 50%;
     transform: translateX(-50%);
     width: 600px; 
     height: 100px; 
     
-    /* [수정 핵심] */
-    border: none !important; 
-    background: none !important;
-    background-color: transparent;
+    /* [투명화 설정] */
+    border: none !important;           /* 외각선을 완전히 지움 */
+    background: transparent !important; /* 배경색을 투명하게 설정 */
     
     cursor: pointer; 
     z-index: 101;
@@ -124,6 +311,41 @@ html, body {
 .dots-container { width: 1080px; height: 100px; display: flex; justify-content: center; align-items: center; gap: 15px; background: #fff; }
 .dot { width: 15px; height: 15px; background: rgba(0,0,0,0.15); border-radius: 50%; }
 .dot.active { background: #000080; }
+
+/* 하단 프레임 영역 설정 */
+.bottom-frame {
+    position: relative;
+    width: 1080px;
+    height: auto;
+}
+
+
+
+/* 세로 버튼 컨테이너 */
+.bottom-button-column {
+    position: absolute;
+    top: 50%;           /* 이미지 내 버튼 영역의 중앙 */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column; /* 위에서 아래로 나열 */
+    gap: 40px;             /* 버튼 사이의 세로 간격 40px */
+    z-index: 100;
+}
+
+/* 개별 버튼 스타일 */
+.bottom-button-column button {
+    width: 966px;       /* 너비 966px */
+    height: 153px;      /* 높이 153px */
+    background: transparent;
+    border: none;       /* 위치 조정 시 2px solid green; 으로 확인 */
+    cursor: pointer;
+    outline: none;
+}
+
+
+
+
 
 /* 잠금 관련 레이어 스타일 */
 #full-screen-fechar { 
@@ -185,4 +407,72 @@ html, body {
 #ok-btn { 
     width: 650px; height: 110px; background: #1557c0; color: white; 
     border-radius: 55px; border: none; font-size: 38px; font-weight: bold; cursor: pointer;
+}
+
+
+
+/* 에러 알림창이 모든 페이지 위로 올라오게 설정 */
+.alert-overlay { 
+    display: none; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 1080px; 
+    height: 2211px; 
+    background: rgba(0,0,0,0.6); 
+    z-index: 1000000 !important; /* 숫자를 아주 크게 해서 최상단으로 올림 */
+}
+
+
+
+
+/* --- im3-1 전용 슬라이더 (v2) 전체 화면 버전 --- */
+
+.slider-container-v2 {
+    position: absolute;
+    top: 0;        /* 화면 맨 위부터 */
+    left: 0;
+    width: 1080px;  /* 전체 너비 */
+    height: 2211px; /* 전체 높이 */
+    overflow: hidden;
+    z-index: 1000;  /* 배경 이미지보다 위로 */
+    background: #fff;
+    border: none !important; /* 빨간 박스 제거 */
+}
+
+.slider-wrapper-v2 {
+    display: flex;
+    width: 400%; 
+    height: 100%;
+    transition: transform 0.5s ease-out;
+}
+
+.slide-v2 {
+    width: 1080px; /* 한 장당 너비 */
+    height: 2211px;
+    object-fit: fill; /* 이미지 꽉 채우기 */
+}
+
+/* 점(Pagination) 위치 조정 */
+.pagination-v2 {
+    position: absolute;
+    bottom: 100px; /* 화면 하단 적당한 위치 */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    z-index: 1001;
+}
+
+/* 클릭용 투명 버튼 (배경 im3-1.gif의 특정 위치) */
+#open-slider-btn {
+    position: absolute;
+    top: 40%;      /* 클릭하고 싶은 위치로 조정하세요 */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    height: 300px;
+    background: transparent;
+    border: none;  /* 위치 잡을 때만 border: 2px solid red; 사용 */
+    z-index: 10;
 }
