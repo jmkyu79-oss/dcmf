@@ -26,7 +26,7 @@ html, body {
 
 /* 잠금 화면 전용 시간 표시 (색상: f4f4f4) */
 #datetime-display-lock {
-    display: none; position: absolute; top: 170px; right: 310px;
+    display: none; position: absolute; top: 160px; right: 310px;
     font-size: 33px; font-weight: 200; color: #f4f4f4;
     z-index: 10001; font-family: 'Arial', sans-serif;
 }
