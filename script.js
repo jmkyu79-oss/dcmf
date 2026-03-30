@@ -2,6 +2,15 @@
  * 화면 해상도 및 스케일 조정 함수
  * 1080x2211 기준 비율로 브라우저 크기에 맞춰 전체 컨테이너 크기 조정
  */
+// 파일 상단에는 변수 이름만 선언
+let isDraggingV2 = false;
+let startXV2 = 0;
+let currentTranslateV2 = 0;
+let prevTranslateV2 = 0;
+let currentIndexV2 = 0;
+const slideWidthV2 = 1080;
+
+
 function resizeApp() {
     const container = document.getElementById('app-container');
     const scaleX = window.innerWidth / 1080;
@@ -50,7 +59,7 @@ function handleLogin() {
     
     const pw = document.getElementById('password-input').value;
     // 비밀번호 체크
-    if (pw === "456") {
+    if (pw === "qaz99") {
         goToPage('page1');
     } else {
         // 비밀번호 틀릴 시 에러 팝업 표시
@@ -179,16 +188,6 @@ function handleFakeLogin() {
     fakeInput.focus();
 }
 
-// 기존 goToPage 함수 안에 포커스 로직 연결 (중요!)
-// 기존 goToPage 함수를 찾아서 이 내용을 추가해 주셔야 합니다.
-const originalGoToPage = goToPage; 
-goToPage = function(id) {
-    originalGoToPage(id); // 기존 기능 수행
-    if (id === 'page3-3') {
-        setTimeout(focusFakeInput, 100); // 0.1초 뒤에 커서 깜빡이게 설정
-    }
-};
-
 // 엔터 키 이벤트 등록 (DOMContentLoaded 내부에 추가 권장)
 document.addEventListener('DOMContentLoaded', () => {
     const fakeInput = document.getElementById('fake-password-input');
@@ -221,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
         slider.addEventListener('scroll', () => {
             const index = Math.round(slider.scrollLeft / 1080);
             dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
-        });
+        }, { passive: true }); // 스크롤 성능 향상);
     }
 
     // 입력창에서 엔터 키로 로그인 가능하게 설정
@@ -237,25 +236,22 @@ document.addEventListener('DOMContentLoaded', () => {
    im3-1 전용 슬라이더 (v2) 로직
    ========================================= */
 
-const containerV2 = document.getElementById('slider-container-v2');
-const wrapperV2 = document.getElementById('slider-wrapper-v2');
-const dotsV2 = document.querySelectorAll('.dot-v2');
-
-let isDraggingV2 = false;
-let startXV2 = 0;
-let currentTranslateV2 = 0;
-let prevTranslateV2 = 0;
-let currentIndexV2 = 0;
-const slideWidthV2 = 1080; // 슬라이드 넓이 (CSS와 동일하게)
-const totalSlidesV2 = dotsV2.length;
 
 // --- 공통 함수 ---
 
 // 특정 슬라이드로 이동
+let totalSlidesV2 = 4; // 변수 추가 (필수)
+
+// 특정 슬라이드로 이동
 function goToSlideV2(index) {
+    const wrapperV2 = document.getElementById('slider-wrapper-v2');
+    if (!wrapperV2) return;
+    
     currentIndexV2 = index;
     currentTranslateV2 = currentIndexV2 * -slideWidthV2;
     prevTranslateV2 = currentTranslateV2;
+    
+    wrapperV2.style.transition = 'transform 0.5s ease-out';
     wrapperV2.style.transform = `translateX(${currentTranslateV2}px)`;
     updateDotsV2();
 }
@@ -274,14 +270,13 @@ function snapToNearestSlideV2() {
     goToSlideV2(currentIndexV2);
 }
 
-// 도트(점) 업데이트
+// 도트 업데이트
 function updateDotsV2() {
-    const allDotsV2 = document.querySelectorAll('.dot-v2'); // 함수 안에서 다시 읽어옴
-    allDotsV2.forEach((dot, index) => {
+    const dots = document.querySelectorAll('.dot-v2');
+    dots.forEach((dot, index) => {
         dot.classList.toggle('active', index === currentIndexV2);
     });
 }
-
 
 // --- 마우스/터치 이벤트 등록 ---
 
@@ -289,8 +284,8 @@ function updateDotsV2() {
 const dragStartV2 = (e) => {
     isDraggingV2 = true;
     startXV2 = getXV2(e);
-    wrapperV2.style.transition = 'none'; // 드래그 중에는 애니메이션 끔
-    wrapperV2.style.cursor = 'grabbing';
+    const wrapperV2 = document.getElementById('slider-wrapper-v2');
+    wrapperV2.style.transition = 'none'; 
 };
 
 // 드래그 중
@@ -300,12 +295,12 @@ const dragMoveV2 = (e) => {
     const currentMove = currentX - startXV2;
     currentTranslateV2 = prevTranslateV2 + currentMove;
     
-    // 경계 밖 드래그 방지 (처음과 끝)
+    // 경계 제한
     if (currentTranslateV2 > 0) currentTranslateV2 = 0;
-    if (currentTranslateV2 < -(totalSlidesV2 - 1) * slideWidthV2) {
-        currentTranslateV2 = -(totalSlidesV2 - 1) * slideWidthV2;
-    }
+    const maxTranslate = -(totalSlidesV2 - 1) * slideWidthV2;
+    if (currentTranslateV2 < maxTranslate) currentTranslateV2 = maxTranslate;
     
+    const wrapperV2 = document.getElementById('slider-wrapper-v2');
     wrapperV2.style.transform = `translateX(${currentTranslateV2}px)`;
 };
 
@@ -313,10 +308,20 @@ const dragMoveV2 = (e) => {
 const dragEndV2 = () => {
     if (!isDraggingV2) return;
     isDraggingV2 = false;
-    wrapperV2.style.transition = 'transform 0.5s ease-out'; // 애니메이션 다시 켬
-    wrapperV2.style.cursor = 'grab';
-    snapToNearestSlideV2();
+    
+    const movedBy = currentTranslateV2 - prevTranslateV2;
+    // 100px 이상 움직이면 페이지 전환
+    if (movedBy < -100 && currentIndexV2 < totalSlidesV2 - 1) {
+        currentIndexV2++;
+    } else if (movedBy > 100 && currentIndexV2 > 0) {
+        currentIndexV2--;
+    }
+    
+    goToSlideV2(currentIndexV2);
 };
+
+// const getXV2 = (e) => e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+
 
 // 좌표 취득 Helper
 const getXV2 = (e) => {
@@ -324,32 +329,39 @@ const getXV2 = (e) => {
 };
 
 // 이벤트 리스너 연결
-wrapperV2.addEventListener('mousedown', dragStartV2);
-wrapperV2.addEventListener('mousemove', dragMoveV2);
-wrapperV2.addEventListener('mouseup', dragEndV2);
-wrapperV2.addEventListener('mouseleave', dragEndV2); // 영역 밖으로 나가면 종료
-
-wrapperV2.addEventListener('touchstart', dragStartV2);
-wrapperV2.addEventListener('touchmove', dragMoveV2);
-wrapperV2.addEventListener('touchend', dragEndV2);
-
-// 페이지 진입 시 초기화 (첫 번째 슬라이드)
+// 초기 이벤트 바인딩 (파일 하단 DOMContentLoaded에 추가)
 document.addEventListener('DOMContentLoaded', () => {
-    goToSlideV2(0);
+    const wrapperV2 = document.getElementById('slider-wrapper-v2');
+    if (wrapperV2) {
+        wrapperV2.addEventListener('mousedown', dragStartV2);
+        wrapperV2.addEventListener('mousemove', dragMoveV2);
+        window.addEventListener('mouseup', dragEndV2); // 윈도우 전체에서 마우스 뗌 감지
+
+        wrapperV2.addEventListener('touchstart', dragStartV2, { passive: false });
+        wrapperV2.addEventListener('touchmove', dragMoveV2, { passive: false });
+        wrapperV2.addEventListener('touchend', dragEndV2);
+    }
 });
 
 
 
 
-// [추가] 버튼 클릭 시 슬라이더 화면 표시 함수
+// 슬라이더 열기 시 초기화 필수
 function openSliderV2() {
     const container = document.getElementById('slider-container-v2');
-    const pagination = document.getElementById('pagination-v2');
-    
     if(container) container.style.display = 'block';
-    if(pagination) pagination.style.display = 'flex';
     
-    goToSlideV2(0); // 항상 첫 장부터
+    currentIndexV2 = 0;
+    setTimeout(() => goToSlideV2(0), 10); // 렌더링 후 실행
+}
+
+// 슬라이더 닫기 함수
+function closeSliderV2() {
+    const container = document.getElementById('slider-container-v2');
+    if(container) {
+        container.style.display = 'none';
+        console.log("Slider closed"); // 동작 확인용
+    }
 }
 
 // [기존 코드 수정] snapToNearestSlideV2 함수 내부 
@@ -367,32 +379,43 @@ function snapToNearestSlideV2() {
     goToSlideV2(currentIndexV2);
 }
 
-// [기존 goToPage 수정] 
-// 페이지를 떠날 때 슬라이더를 다시 숨기려면 이 로직이 필요합니다.
-const originalGoToPageSlider = goToPage; 
-goToPage = function(id) {
-    originalGoToPageSlider(id);
-    if (id !== 'page3-1') {
-        // im3-1 페이지를 벗어나면 슬라이더 상태 초기화
-        const sContainer = document.getElementById('slider-container-v2');
-        const sDots = document.getElementById('pagination-v2');
-        if(sContainer) sContainer.style.display = 'none';
-        if(sDots) sDots.style.display = 'none';
+// 기존에 흩어져 있던 오버라이드 로직을 하나로 합칩니다.
+function goToPage(id) {
+    // 1. 깜빡임 효과
+    const flash = document.getElementById('flash-overlay');
+    if (flash) {
+        flash.classList.remove('flash-active');
+        void flash.offsetWidth; 
+        flash.classList.add('flash-active');
     }
-};
 
+    // 2. 모든 페이지 비활성화 후 선택한 페이지 활성화
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById(id);
+    if (target) target.classList.add('active');
+    
+    // 3. 페이지별 특수 로직 (잠금, 포커스, 슬라이더 등)
+    const sContainer = document.getElementById('slider-container-v2');
+    const sPagination = document.getElementById('pagination-v2');
 
+    if (id === 'page3') {
+        setStaticTime();
+        document.getElementById('full-screen-fechar').style.display = 'none';
+        document.getElementById('locking-overlay').style.display = 'none';
+        document.getElementById('unlock-btn').style.display = 'none';
+    } 
+    else if (id === 'page3-3') {
+        setTimeout(focusFakeInput, 100);
+    }
+    else if (id === 'page3-1') {
+        if(sPagination) sPagination.style.display = 'flex';
+    }
 
-
-// [추가] goToPage 함수 수정 (페이지 이탈 시 초기화)
-const originalGoToPageForV2 = goToPage;
-goToPage = function(id) {
-    originalGoToPageForV2(id);
-    // page3-1을 벗어날 때 슬라이더와 점을 숨김
+    // 다른 페이지로 이동 시 슬라이더 자동 닫기
     if (id !== 'page3-1') {
-        const sContainer = document.getElementById('slider-container-v2');
-        const sPagination = document.getElementById('pagination-v2');
         if(sContainer) sContainer.style.display = 'none';
         if(sPagination) sPagination.style.display = 'none';
     }
-};
+
+    resizeApp();
+}

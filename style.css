@@ -26,7 +26,7 @@ html, body {
 
 /* 잠금 화면 전용 시간 표시 (색상: f4f4f4) */
 #datetime-display-lock {
-    display: none; position: absolute; top: 160px; right: 310px;
+    display: none; position: absolute; top: 170px; right: 310px;
     font-size: 33px; font-weight: 200; color: #f4f4f4;
     z-index: 10001; font-family: 'Arial', sans-serif;
 }
@@ -38,33 +38,84 @@ html, body {
 .top-frame { width: 1080px; height: auto; line-height: 0; position: relative; z-index: 2; }
 .top-frame img { width: 1080px; height: auto; display: block; }
 
-.scroll-container { 
-    width: 1080px; height: 1959px; 
-    overflow-y: scroll; scrollbar-width: none;
-    position: relative; z-index: 2;
+
+/* 1. body에 직접 user-select를 설정하여 지연 없는 차단 구현 */
+body {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none; /* iOS 롱탭 메뉴 방지 */
 }
-.scroll-container::-webkit-scrollbar { display: none; }
+
+
+/* 2. 세로 스크롤 컨테이너 최적화 */
+.scroll-container { 
+    width: 1080px; 
+    height: 1959px; 
+    overflow-y: scroll; 
+    scrollbar-width: none;
+    position: relative; 
+    z-index: 2;
+    
+    /* [추가] 모바일 가속 및 터치 반응 최적화 */
+    -webkit-overflow-scrolling: touch; 
+    touch-action: pan-y; /* 세로 스크롤에만 집중하도록 설정 */
+    overscroll-behavior-y: contain; /* 상단/하단 바운스 시 부모 스크롤 간섭 방지 */
+}
 
 /* 중간 슬라이더 영역: 상단 프레임과 밀착(margin 0) */
-.middle-frame-wrapper { 
-    width: 1080px; height: 1646px; 
-    margin-top: 0; 
-    overflow-x: scroll; display: flex; 
-    scroll-snap-type: x mandatory; scrollbar-width: none;
-}
-.middle-frame-wrapper::-webkit-scrollbar { display: none; }
+/* style.css 수정본 */
 
-.middle-slider { display: flex; width: 4320px; }
+/* 3. 슬라이더 영역 (가로+세로 모두 허용 유지) */
+.middle-frame-wrapper { 
+    width: 1080px;
+    overflow-x: auto;          /* 가로 스크롤 활성화 */
+    overflow-y: hidden;        /* 세로 방향은 숨김 */
+    white-space: nowrap;       /* 슬라이드 가로 정렬 유지 */
+    
+    /* 터치 동작: 가로와 세로 모두 허용하여 부모의 pan-y 제한을 해제 */
+    touch-action: pan-x pan-y; 
+    
+    /* 스냅 기능: 한 장씩 딱딱 걸리게 설정 */
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;     /* 스크롤바 숨기기 (Firefox) */
+    z-index: 5; 
+}
+.middle-frame-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.middle-slider { 
+    display: flex; 
+    width: 4320px; 
+}
+
 .slide { 
-    width: 1080px; height: 1646px; 
-    scroll-snap-align: start;   /* 스냅 지점을 이미지 시작점으로 설정 */
-    scroll-snap-stop: always;  /* 드래그 한 번에 한 장씩만 멈추도록 설정 (핵심 수정) */
+    width: 1080px; 
+    height: 1646px; 
+    scroll-snap-align: start;   
+    scroll-snap-stop: always;  
     flex-shrink: 0; 
 } 
-.slide img { width: 1080px; height: 1646px; object-fit: cover; }
 
+/* // .slide img... 부분을 아래 코드로 교체하세요 */
+.slide img { 
+    width: 1080px; 
+    height: 1646px; 
+    object-fit: cover; 
+    /* 이미지 드래그가 브라우저 스크롤을 방해하지 않도록 차단 */
+    -webkit-user-drag: none; 
+    user-select: none;
+    pointer-events: auto; /* 클릭(잠금기능)은 가능하게 유지 */
+}
 
-
+/* 4. 이미지 태그의 기본 드래그 동작이 스크롤을 방해하지 않게 차단 */
+img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+}
 
 
 /* 비밀번호 입력창 개별 위치 설정 
@@ -427,52 +478,92 @@ html, body {
 
 
 /* --- im3-1 전용 슬라이더 (v2) 전체 화면 버전 --- */
+/* --- im3-1 전용 슬라이더 (v2) 업데이트 --- */
 
+
+
+/* 2. 전체 화면 슬라이더 컨테이너 */
 .slider-container-v2 {
     position: absolute;
-    top: 0;        /* 화면 맨 위부터 */
+    top: 0;
     left: 0;
-    width: 1080px;  /* 전체 너비 */
-    height: 2211px; /* 전체 높이 */
+    width: 1080px;
+    height: 2211px;
     overflow: hidden;
-    z-index: 1000;  /* 배경 이미지보다 위로 */
-    background: #fff;
-    border: none !important; /* 빨간 박스 제거 */
+    background: #000;
+    z-index: 1500;
+}
+
+/* 뒤로가기 버튼이 슬라이더보다 위에 보이도록 설정 */
+.slider-back-btn {
+    z-index: 2100 !important; 
+}
+
+
+/* 슬라이더 내부 전용 뒤로가기 버튼 위치 조정 */
+.slider-container-v2 .slider-back-btn {
+    z-index: 1010; /* 슬라이드 이미지보다 위에 탑승 */
+    /* 기존 .back-button 스타일(top: 155px 등)을 그대로 상속받음 */
 }
 
 .slider-wrapper-v2 {
     display: flex;
-    width: 400%; 
+    width: 400%; /* 이미지 4장 */
     height: 100%;
-    transition: transform 0.5s ease-out;
+    transition: transform 0.5s ease-out; /* 부드러운 이동 */
+    cursor: grab;
 }
 
 .slide-v2 {
-    width: 1080px; /* 한 장당 너비 */
+    width: 1080px; /* 고정 해상도 */
     height: 2211px;
-    object-fit: fill; /* 이미지 꽉 채우기 */
+    object-fit: fill; /* 화면에 꽉 채움 */
+    -webkit-user-drag: none; /* 드래그 방지 */
 }
 
-/* 점(Pagination) 위치 조정 */
+/* 3. 점(Pagination) 컨테이너 설정 */
+/* 인디케이터 점 위치: 밑에서 5% (약 2100px 지점) */
 .pagination-v2 {
     position: absolute;
-    bottom: 100px; /* 화면 하단 적당한 위치 */
+    top: 2150px; 
     left: 50%;
     transform: translateX(-50%);
-    display: flex;
-    gap: 20px;
-    z-index: 1001;
+    display: flex; 
+    gap: 25px;
+    z-index: 9999 !important; 
+    /* --- 배경 및 패딩 제거 --- */
+    background: transparent !important; /* 하얀색 배경을 투명하게 변경 */
+    padding: 0;                          /* 여백 제거 */
+    border-radius: 0;                    /* 둥근 테두리 효과 제거 */
+}
+
+
+/* 개별 점 스타일: 회색 바탕, 파란 테두리 */
+.dot-v2 {
+    width: 23px;
+    height: 23px;
+    background-color: #bbbbbb;
+    border: 2px solid #000080;
+    border-radius: 50%;
+}
+
+.dot-v2.active {
+    background-color: #000080;
 }
 
 /* 클릭용 투명 버튼 (배경 im3-1.gif의 특정 위치) */
+/* im3-1.gif 버튼 외각선 표시 (나중에 위치 수정용) */
 #open-slider-btn {
     position: absolute;
-    top: 40%;      /* 클릭하고 싶은 위치로 조정하세요 */
+    top: 20%;
     left: 50%;
     transform: translateX(-50%);
     width: 900px;
-    height: 300px;
-    background: transparent;
-    border: none;  /* 위치 잡을 때만 border: 2px solid red; 사용 */
+    height: 150px;
+/* --- 이 부분을 수정하세요 --- */
+    background: transparent !important; /* 배경을 투명하게 */
+    border: none !important;            /* 빨간색 외각선 제거 */
+    /* -------------------------- */
     z-index: 10;
+    cursor: pointer;
 }
