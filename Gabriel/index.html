@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <!-- 모바일 상태바 글자색 및 네비게이션바 배경색 설정 -->
+    <meta name="theme-color" content="#2b2b2b">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Full Screen App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<!-- onselectstart와 ondragstart를 제거합니다 -->
+<body oncontextmenu="return false">
+
+    <div id="app-container">
+        <!-- 로그인 페이지 섹션 -->
+       <!-- 로그인 페이지 섹션 -->
+        <section id="login-page" class="page active">
+          <div class="content-bg">
+            <img src="potos/images/enter.gif">
+        
+            <!-- 개별적으로 위치를 잡기 위해 컨테이너 밖으로 꺼냅니다 -->
+            <!-- 비밀번호 입력란 -->
+            <input type="password" id="password-input" maxlength="15">
+        
+            <!-- 로그인 버튼 -->
+            <button id="login-btn" onclick="handleLogin()"></button>
+          </div>
+ 
+        </section>
+
+<!-- 1페이지 와 [메인 메뉴] 버튼 1, 2, 3, 4 연결 -->
+<section id="page1" class="page">
+    <div class="content-bg">
+        <img src="potos/images/im1.gif">
+        <div class="button-column">
+            <button onclick="goToPage('page2')"></button>   <!-- 버튼 1 -> im2.gif -->
+            <button onclick="goToPage('page1-2')"></button> <!-- 버튼 2 -> im1-2.gif -->
+            <button onclick="goToPage('page1-3')"></button> <!-- 버튼 3 -> im1-3.gif -->
+           <!-- goToPage 부분을 지우고 window 명령만 남깁니다 -->
+            <button onclick="openExternalLink('https://www.gov.br/transportes/pt-br/cnh-do-brasil')"></button> <!-- 버튼 4 -> im1-4.gif -->
+        </div>
+    </div>
+</section>
+
+<!-- [버튼 2 클릭 시] im1-2.gif 페이지 -->
+<section id="page1-2" class="page">
+    <!-- 이 버튼이 im1-2.gif 이미지 위의 뒤로가기 화살표 자리에 위치하게 됩니다 -->
+    <button class="back-button" onclick="goToPage('page1')"></button>
+    <div class="content-bg">
+        <img src="potos/images/im1-2.gif">
+    </div>
+</section>
+
+<!-- [버튼 3 클릭 시] im1-3.gif 페이지 -->
+<section id="page1-3" class="page">
+    <button class="back-button" onclick="goToPage('page1')"></button>
+    <div class="content-bg">
+        <img src="potos/images/im1-3.gif">
+    </div>
+</section>
+
+<!-- [버튼 4 클릭 시] im1-4.gif 페이지 --
+<section id="page1-4" class="page">
+    <button class="back-button" onclick="goToPage('page1')"></button>
+    <div class="content-bg">
+        <img src="potos/images/im1-4.gif">
+    </div>
+</section> -->
+
+<!-- 페이지 2: 상세 메뉴 페이지 -->
+<section id="page2" class="page">
+    <button class="back-button" onclick="goToPage('page1')"></button>
+    <div class="content-bg">
+        <img src="potos/images/im2.gif">
+        <div class="button-grid">
+            <div class="col">
+                <!-- 왼쪽 컬럼 버튼 3개 -->
+                <button onclick="goToPage('page3')"></button>   <!-- 버튼 1 -->
+                <button onclick="goToPage('page2-2')"></button> <!-- 버튼 2 추가 -->
+                <button onclick="goToPage('page2-3')"></button> <!-- 버튼 3 추가 -->
+            </div>
+            <div class="col">
+                <!-- 오른쪽 컬럼 버튼 2개 -->
+                <button onclick="goToPage('page2-4')"></button> <!-- 버튼 4 추가 -->
+                <button onclick="goToPage('page2-5')"></button> <!-- 버튼 5 추가 -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- im2-2 페이지 -->
+<section id="page2-2" class="page">
+    <button class="back-button" onclick="goToPage('page2')"></button>
+    <div class="content-bg">
+        <img src="potos/images/im2-2.gif">
+    </div>
+</section>
+
+<!-- im2-3 페이지 -->
+<section id="page2-3" class="page">
+    <button class="back-button" onclick="goToPage('page2')"></button>
+    <div class="content-bg">
+        <img src="potos/images/im2-3.gif">
+    </div>
+</section>
+
+<!-- im2-4 페이지 -->
+<section id="page2-4" class="page">
+    <button class="back-button" onclick="goToPage('page2')"></button>
+    <div class="content-bg">
+        <img src="potos/images/im2-4.gif">
+    </div>
+</section>
+
+<!-- im2-5 페이지 -->
+<section id="page2-5" class="page">
+    <button class="back-button" onclick="goToPage('page2')"></button>
+    <div class="content-bg">
+        <img src="potos/images/im2-5.gif">
+    </div>
+</section>
+
+        <!-- 페이지 3: 메인 스크롤 및 슬라이더 페이지 -->
+        <section id="page3" class="page">
+            <button class="back-button" onclick="goToPage('page2')" style="z-index: 1001;"></button>
+            
+            <!-- 시간 표시 (일반용 및 잠금용) -->
+            <div id="datetime-display"></div>
+            <div id="datetime-display-lock"></div>
+
+            <!-- 상단 프레임 -->
+            <header class="top-frame">
+                <img src="potos/images/im3-top.gif">
+            </header>
+            
+            <!-- 메인 콘텐츠 (중간 슬라이더 + 하단 프레임) -->
+            <main class="scroll-container">
+                <div class="middle-frame-wrapper" id="slider">
+                    <div class="middle-slider">
+                        <!-- 첫 번째 이미지 클릭 시 잠금 모드 진입 -->
+                        <div class="slide"><img id="target-img" src="potos/images/im3-cent/im3-1.gif"></div>
+                        <div class="slide"><img src="potos/images/im3-cent/im3-2.gif"></div>
+                        <div class="slide"><img src="potos/images/im3-cent/im3-3.gif"></div>
+                        <div class="slide"><img src="potos/images/im3-cent/im3-4.gif"></div>
+                    </div>
+                </div>
+                <!-- 인디케이터 점 -->
+                <div class="dots-container">
+                    <span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                </div>
+                <!-- 하단 프레임 -->
+                  <footer class="bottom-frame">
+                    <img src="potos/images/im3-batt.gif">
+                       <!-- 세로 버튼 열 컨테이너 -->
+                     <div class="bottom-button-column">
+                      <button onclick="goToPage('page3-1')"></button>
+                      <button onclick="goToPage('page3-2')"></button>
+                      <button onclick="goToPage('page3-3')"></button>
+                      <button onclick="showPopup4()"></button>
+                     </div>
+                  </footer>
+            </main>
+
+            <!-- 잠금 화면 레이어 (fechar.gif) -->
+            <div id="full-screen-fechar">
+                <img src="potos/images/fechar.gif">
+            </div>
+            
+            <!-- 터치 이벤트 차단용 투명 레이어 -->
+            <div id="locking-overlay"></div>
+            
+            <!-- 잠금 해제 버튼 (화면 최상단 레이어, 위치: 1830px 중앙) -->
+            <button id="unlock-btn" onclick="unlockApp()"></button>
+
+
+            <!-- im3-4.gif를 잠깐 띄웠다가 없애는 팝업레이어 -->
+            <div id="popup-overlay-4" class="popup-overlay">
+              <img src="potos/images/im3-4.gif" alt="Popup Image">
+            </div>
+
+        </section>
+
+<!-- [추가] im3-1 ~ im3-4 상세 이미지 페이지들 -->
+<!-- [수정] im3-1 상세 페이지 섹션 -->
+<section id="page3-1" class="page">
+    <div class="content-bg">
+        <img src="potos/images/im3-1.gif"> 
+        <!-- im3-1.gif 전용 뒤로가기 (슬라이더 밖일 때) -->
+        <button class="back-button" onclick="goToPage('page3')"></button>
+    </div>
+
+    <!-- 클릭 시 슬라이더를 여는 버튼 (외각선 표시됨) -->
+    <button id="open-slider-btn" onclick="openSliderV2()"></button> 
+
+    <!-- 전체 화면 슬라이더 레이어 -->
+    <div class="slider-container-v2" id="slider-container-v2" style="display: none;">
+        <!-- 슬라이더 내부에 있을 때의 뒤로가기 (슬라이더만 닫음) -->
+        <button class="back-button slider-back-btn" onclick="closeSliderV2()"></button>
+        
+        <div class="slider-wrapper-v2" id="slider-wrapper-v2">
+            <img src="potos/images/im3-1-1.gif" class="slide-v2">
+            <img src="potos/images/im3-1-2.gif" class="slide-v2">
+            <img src="potos/images/im3-1-3.gif" class="slide-v2">
+            <img src="potos/images/im3-1-4.gif" class="slide-v2">
+        </div>
+
+        <div class="pagination-v2" id="pagination-v2">
+            <span class="dot-v2 active"></span>
+            <span class="dot-v2"></span>
+            <span class="dot-v2"></span>
+            <span class="dot-v2"></span>
+        </div>
+    </div>
+</section>
+
+<section id="page3-2" class="page">
+    <button class="back-button" onclick="goToPage('page3')"></button>
+    <div class="content-bg"><img src="potos/images/im3-2.gif"></div>
+</section>
+
+<section id="page3-3" class="page">
+    <button class="back-button" onclick="goToPage('page3')"></button>
+    <div class="content-bg">
+        <img src="potos/images/im3-3.gif">
+        
+        <!-- im3-3 전용 비밀번호 입력창 -->
+        <input type="password" id="fake-password-input" maxlength="15">
+        
+        <!-- im3-3 전용 확인 버튼 (무조건 에러 발생) -->
+        <button id="fake-login-btn" onclick="handleFakeLogin()"></button>
+    </div>
+</section>
+
+<section id="page3-4" class="page">
+    <button class="back-button" onclick="goToPage('page3')"></button>
+    <div class="content-bg"><img src="potos/images/im3-4.gif"></div>
+</section>
+
+
+           <!-- 에러 메시지 알림창 (errer.gif와 동일한 문구 및 줄바꿈) -->
+            <div id="custom-alert" class="alert-overlay">
+                <div class="alert-box">
+                    <div class="error-circle"><span class="x-mark">✕</span></div>
+                    <p class="error-text">Chave de acesso incorreta. Verifique a<br>chave digitada.</p>
+                    <button id="ok-btn" onclick="closeAlert()">OK</button>
+                </div>
+            </div>
+
+
+<!-- 깜빡임 효과용 레이어 추가 -->
+    <div id="flash-overlay"></div>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
